@@ -47,6 +47,7 @@ export default defineConfig([
                     caughtErrorsIgnorePattern: '^_$',
                 },
             ],
+            '@typescript-eslint/no-empty-object-type': 'warn'
         },
     },
 ])

@@ -1,7 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
+
+import AuthLayout from '../../layout/AuthLayout'
 import DefaultLayout from '../../layout/DefaultLayout'
 import HomePage from '../../pages/Home'
-import AuthLayout from '../../layout/AuthLayout'
 import LoginPage from '../../pages/Login'
 
 const AppRoutes = () => {
