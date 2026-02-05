@@ -63,7 +63,7 @@ html.dark {
     }
 }
 
-html.dark .tippy-box {
+html .tippy-box {
     background-color: rgb(208, 208, 208);
     border-radius: 8px;
     font-weight: 400;
@@ -75,7 +75,7 @@ html .tippy-box * {
     font-size: 13px;
 }
 
-html.dark .tippy-arrow {
+html .tippy-arrow {
     color: rgb(208, 208, 208);
 }
 

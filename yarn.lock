@@ -1509,6 +1509,13 @@ hermes-parser@^0.25.1:
   dependencies:
     hermes-estree "0.25.1"
 
+huanpenguin-tippy-react@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/huanpenguin-tippy-react/-/huanpenguin-tippy-react-1.0.1.tgz#4b47e82224691f9ce72276101e8e470c50dae2b2"
+  integrity sha512-IzWm1my10S0SwxCKIRcEAS4Dvl6jiBeNrwiKjSSbsICoMF1qkvBN2VuORMHvN1jNxHAibpI4cFLZCBFTuEvEAQ==
+  dependencies:
+    tippy.js "^6.3.1"
+
 ignore@^5.2.0:
   version "5.3.2"
   resolved "https://registry.npmjs.org/ignore/-/ignore-5.3.2.tgz"
@@ -2119,7 +2126,7 @@ tinyglobby@^0.2.15:
     fdir "^6.5.0"
     picomatch "^4.0.3"
 
-tippy.js@^6.3.7:
+tippy.js@^6.3.1, tippy.js@^6.3.7:
   version "6.3.7"
   resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-6.3.7.tgz#8ccfb651d642010ed9a32ff29b0e9e19c5b8c61c"
   integrity sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==

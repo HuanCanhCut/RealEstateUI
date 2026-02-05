@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 
+import 'tippy.js/dist/tippy.css'
 import App from './App.tsx'
 import GlobalStyles from './components/GlobalStyles/GlobalStyles.tsx'
 import Toaster from './components/Sonner/Sonner.tsx'
