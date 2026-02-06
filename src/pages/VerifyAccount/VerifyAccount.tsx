@@ -6,7 +6,7 @@ import { OTPInput } from 'input-otp'
 import { toast } from 'sonner'
 
 import Resend from './components/Resend'
-import { FakeDash, Slot } from '~/components/InputOtp/InputOtp'
+import { FakeDash, Slot } from '~/components/InputOTP/InputOTP'
 import config from '~/config'
 import * as authService from '~/services/authService'
 import handleApiError from '~/utils/handleApiError'

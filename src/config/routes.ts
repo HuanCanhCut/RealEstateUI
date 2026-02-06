@@ -1,4 +1,4 @@
-export const AUTH_ROUTES = [
+const ALL_ROUTES = [
     {
         path: '/auth/login',
         key: 'login',
@@ -15,18 +15,11 @@ export const AUTH_ROUTES = [
         path: '/auth/verify',
         key: 'verify',
     },
-] as const
-
-export const PRIVATE_ROUTES = [] as const
-
-export const PUBLIC_ROUTES = [
     {
         path: '/',
         key: 'home',
     },
 ] as const
-
-const ALL_ROUTES = [...AUTH_ROUTES, ...PRIVATE_ROUTES, ...PUBLIC_ROUTES] as const
 
 type RouteKey = (typeof ALL_ROUTES)[number]['key']
 

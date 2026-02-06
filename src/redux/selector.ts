@@ -1,3 +1,3 @@
 import type { RootState } from './store'
 
-export const getCurrentUser = (state: RootState) => state.user.currentUser
+export const selectCurrentUser = (state: RootState) => state.auth.currentUser

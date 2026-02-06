@@ -155,19 +155,11 @@ html.dark {
 }
 
 html .tippy-box {
-    background-color: rgb(208, 208, 208);
     border-radius: 8px;
-    font-weight: 400;
-    font-size: 12px;
-    color: #000;
 }
 
 html .tippy-box * {
     font-size: 13px;
-}
-
-html .tippy-arrow {
-    color: rgb(208, 208, 208);
 }
 
 body {
