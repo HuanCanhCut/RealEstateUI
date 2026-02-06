@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { SubmitHandler } from 'react-hook-form'
 import { Controller, useForm } from 'react-hook-form'
-import { Link, useNavigate, useSearchParams } from 'react-router'
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router'
 import { Eye, EyeOff } from 'lucide-react'
 import { z } from 'zod'
 
@@ -32,6 +32,7 @@ const loginSchema = z.object({
 
 const LoginPage = () => {
     const navigation = useNavigate()
+    const { search } = useLocation()
 
     const [searchParams] = useSearchParams()
 
@@ -78,7 +79,7 @@ const LoginPage = () => {
                     window.location.reload()
                 } else {
                     navigation(
-                        `${config.routes.verify}?auth_challenge_id=${encodeURIComponent(response.meta?.auth_challenge_id || '')}&redirect_to=${window.location.origin}${config.routes.home}&from_email=${encodeURIComponent(data.email)}`,
+                        `${config.routes.verify}?auth_challenge_id=${encodeURIComponent(response.meta?.auth_challenge_id || '')}&redirect_to=${searchParams.get('redirect_to') || config.routes.home}&from_email=${encodeURIComponent(data.email)}`,
                     )
                 }
                 return
@@ -133,7 +134,7 @@ const LoginPage = () => {
                 {errorMessage && <span className="text-error text-sm">{errorMessage}</span>}
 
                 <Link
-                    to={config.routes.forgotPassword}
+                    to={`${config.routes.forgotPassword}`}
                     className="mt-1 cursor-pointer text-sm text-gray-500 dark:text-gray-400"
                     tabIndex={-1}
                 >
@@ -147,7 +148,7 @@ const LoginPage = () => {
 
             <span className="text-center text-sm text-gray-500 dark:text-gray-400">
                 Bạn không có tài khoản?{' '}
-                <Link to={config.routes.register} className="text-primary cursor-pointer font-semibold">
+                <Link to={`${config.routes.register}${search}`} className="text-primary cursor-pointer font-semibold">
                     Đăng kí
                 </Link>
             </span>

@@ -4,6 +4,7 @@ import type { UserResponse } from '~/types/user'
 import * as request from '~/utils/axiosClient'
 
 interface RegisterProps {
+    fullname: string
     email: string
     password: string
 }
@@ -14,8 +15,9 @@ interface RegisterResponse extends UserResponse {
     }
 }
 
-export const register = async ({ email, password }: RegisterProps): Promise<RegisterResponse> => {
+export const register = async ({ fullname, email, password }: RegisterProps): Promise<RegisterResponse> => {
     const response = await request.post('/auth/register', {
+        fullname,
         email,
         password,
     })
@@ -23,7 +25,7 @@ export const register = async ({ email, password }: RegisterProps): Promise<Regi
     return response.data
 }
 
-export const login = async ({ email, password }: RegisterProps): Promise<UserResponse> => {
+export const login = async ({ email, password }: Omit<RegisterProps, 'fullname'>): Promise<UserResponse> => {
     const response = await request.post('/auth/login', {
         email,
         password,

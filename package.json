@@ -20,6 +20,7 @@
         "firebase": "^12.9.0",
         "framer-motion": "^12.29.3",
         "huanpenguin-tippy-react": "^1.0.1",
+        "input-otp": "^1.4.2",
         "lucide-react": "^0.563.0",
         "moment-timezone": "^0.6.0",
         "react": "^19.2.0",
