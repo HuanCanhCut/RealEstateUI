@@ -1,16 +1,16 @@
-import { Navigate, type RouteProps } from 'react-router'
+import { Navigate, Outlet } from 'react-router'
 
 import { selectCurrentUser } from '~/redux/selector'
 import { useAppSelector } from '~/redux/types'
 
-const AuthRoute = ({ children }: RouteProps) => {
+const AuthRoute = () => {
     const currentUser = useAppSelector(selectCurrentUser)
 
     if (currentUser) {
         return <Navigate to="/" replace />
     }
 
-    return children
+    return <Outlet />
 }
 
 export default AuthRoute
