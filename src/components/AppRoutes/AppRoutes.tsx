@@ -6,6 +6,7 @@ import DefaultLayout from '~/layout/DefaultLayout'
 import ForgotPasswordPage from '~/pages/ForgotPassword'
 import HomePage from '~/pages/Home/Home'
 import LoginPage from '~/pages/Login'
+import NotFoundPage from '~/pages/NotFound'
 import RegisterPage from '~/pages/Register'
 import VerifyPage from '~/pages/VerifyAccount'
 
@@ -25,6 +26,8 @@ const AppRoutes = () => {
 
                     <Route path="verify" element={<VerifyPage />} />
                 </Route>
+
+                <Route path="*" element={<NotFoundPage />} />
             </Routes>
         </BrowserRouter>
     )
