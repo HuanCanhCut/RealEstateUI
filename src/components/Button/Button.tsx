@@ -1,10 +1,11 @@
 import * as React from 'react'
+import { Link } from 'react-router'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '~/utils/cn'
 
 const buttonVariants = cva(
-    'items-center cursor-pointer justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 shrink-0 outline-none',
+    'flex items-center cursor-pointer justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 shrink-0 outline-none',
     {
         variants: {
             variant: {
@@ -34,11 +35,17 @@ const Button = ({
     className,
     variant,
     size,
+    to,
     ...props
-}: React.ComponentProps<'button'> &
-    VariantProps<typeof buttonVariants> & {
-        asChild?: boolean
-    }) => {
+}: React.ComponentProps<'button'> & VariantProps<typeof buttonVariants> & { to?: string }) => {
+    if (to) {
+        return (
+            <Link to={to} className={cn(buttonVariants({ variant, size, className }), 'border-none')}>
+                <button {...props} />
+            </Link>
+        )
+    }
+
     return <button className={cn(buttonVariants({ variant, size, className }))} {...props} />
 }
 

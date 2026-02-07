@@ -19,6 +19,10 @@ const ALL_ROUTES = [
         path: '/',
         key: 'home',
     },
+    {
+        path: '/user/:nickname',
+        key: 'userProfile',
+    },
 ] as const
 
 type RouteKey = (typeof ALL_ROUTES)[number]['key']
