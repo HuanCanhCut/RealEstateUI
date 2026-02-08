@@ -1,11 +1,13 @@
 interface AppEvents {
-    // MESSAGE_REPLY: { message: MessageModel }
     SELECT_LOCATION: {
         location: {
             province: string
             district: string
             ward: string
         }
+    }
+    SELECT_CATEGORY: {
+        category_id: number | null
     }
 }
 

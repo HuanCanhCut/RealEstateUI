@@ -1,6 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Reddit+Sans:ital,wght@0,200..900;1,200..900&display=swap');
 @import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+    --header-height: 70px;
+}
 
 :root {
     --radius: 0.65rem;
@@ -163,7 +168,7 @@ html .tippy-box * {
 }
 
 body {
-    font-family: 'Segoe UI', Helvetica, Arial, sans-serif !important;
+    font-family: 'Reddit Sans', sans-serif !important;
     font-style: normal;
     font-weight: 400;
 }
@@ -184,7 +189,6 @@ button {
 
 button {
     cursor: pointer;
-    border: none;
 }
 
 .overlay {

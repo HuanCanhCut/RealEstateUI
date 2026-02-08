@@ -254,7 +254,10 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ className }) => {
             }}
         >
             <div
-                className={cn('bg-primary/30 flex cursor-pointer items-center gap-2 rounded-full px-3 py-2', className)}
+                className={cn(
+                    'bg-primary/20 border-primary flex cursor-pointer items-center gap-2 rounded-full border px-3 py-2',
+                    className,
+                )}
             >
                 <MapPin size={16} />
                 <span className="whitespace-nowrap select-none">{location.province || 'Chọn vị trí'}</span>

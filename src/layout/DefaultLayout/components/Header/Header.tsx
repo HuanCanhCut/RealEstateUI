@@ -7,7 +7,7 @@ import LocationSelect from '~/components/LocationSelect'
 
 const Header = () => {
     return (
-        <div className="flex items-center justify-between px-4 py-2 shadow-sm sm:px-8">
+        <div className="fixed top-0 right-0 left-0 z-50 flex h-(--header-height) items-center justify-between border-b border-zinc-300 bg-white px-4 py-2 sm:px-8">
             <div className="flex items-center">
                 <Link to="/">
                     <img

@@ -9,7 +9,7 @@ import Toaster from './components/Sonner/Sonner.tsx'
 import { persistor, store } from './redux/store.ts'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-const queryClient = new QueryClient()
+export const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')!).render(
     <GlobalStyles>

@@ -78,6 +78,14 @@ const Search = () => {
         )
     }
 
+    const handleClickOutside = () => {
+        setShowResult(false)
+    }
+
+    const handleFocus = () => {
+        setShowResult(true)
+    }
+
     return (
         <div className="relative flex w-full max-w-[500px] items-center justify-center px-4 sm:px-8">
             <TippyHeadless
@@ -86,6 +94,7 @@ const Search = () => {
                 render={renderResult}
                 placement="bottom-start"
                 offset={[0, 8]}
+                onClickOutside={handleClickOutside}
                 popperOptions={{
                     modifiers: [
                         {
@@ -104,6 +113,7 @@ const Search = () => {
                     placeholder="Tìm kiếm bất động sản"
                     className="w-full rounded-4xl px-4"
                     value={searchValue}
+                    onFocus={handleFocus}
                     onChange={handleChange}
                 />
             </TippyHeadless>
