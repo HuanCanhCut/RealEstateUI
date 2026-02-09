@@ -7,6 +7,7 @@ import ForgotPasswordPage from '~/pages/ForgotPassword'
 import HomePage from '~/pages/Home/Home'
 import LoginPage from '~/pages/Login'
 import NotFoundPage from '~/pages/NotFound'
+import PostDetailPage from '~/pages/PostDetail'
 import RegisterPage from '~/pages/Register'
 import VerifyPage from '~/pages/VerifyAccount'
 
@@ -16,6 +17,7 @@ const AppRoutes = () => {
             <Routes>
                 <Route element={<DefaultLayout />}>
                     <Route index element={<HomePage />} />
+                    <Route path="/post/:id" element={<PostDetailPage />} />
                 </Route>
                 <Route path="/auth" element={<AuthRoute />}>
                     <Route element={<AuthLayout />}>

@@ -51,3 +51,9 @@ export const handleToggleLikePost = async ({ postId, type }: { postId: number; t
 
     return response.data
 }
+
+export const getPostById = async ({ postId }: { postId: number }): Promise<APIResponse<PostModel>> => {
+    const response = await request.get(`/posts/${postId}`)
+
+    return response.data
+}

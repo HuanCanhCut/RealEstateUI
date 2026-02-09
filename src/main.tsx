@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 
+import 'moment/dist/locale/vi'
 import 'tippy.js/dist/tippy.css'
 import App from './App.tsx'
 import GlobalStyles from './components/GlobalStyles/GlobalStyles.tsx'
@@ -16,6 +17,7 @@ export const queryClient = new QueryClient({
             gcTime: 10 * 60 * 1000, // 10 minutes
             refetchOnWindowFocus: false,
             refetchOnReconnect: true,
+            retry: false,
         },
     },
 })

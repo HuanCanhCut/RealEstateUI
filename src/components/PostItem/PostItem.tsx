@@ -5,6 +5,7 @@ import { MapPin } from 'lucide-react'
 
 import Button from '../Button'
 import { HeartIconRegular, HeartIconSolid } from '../Icons/Icons'
+import PricePerMeter from '../Price'
 import { type InfiniteData, useMutation } from '@tanstack/react-query'
 import config from '~/config'
 import { queryClient } from '~/main'
@@ -64,36 +65,6 @@ const PostItem: React.FC<PostItemProps> = ({ post, className, queryKey }) => {
         },
     })
 
-    const formatVNPrice = (price: number | string) => {
-        const numPrice = typeof price === 'string' ? parseFloat(price) : price
-
-        const billion = 1000000000
-        const million = 1000000
-
-        if (numPrice >= billion) {
-            const billions = numPrice / billion
-
-            if (billions % 1 === 0) {
-                return `${billions} tỷ`
-            }
-
-            return `${billions.toFixed(1)} tỷ`
-        } else {
-            const millions = numPrice / million
-
-            return `${millions} triệu`
-        }
-    }
-
-    const calculatePricePerM2 = (totalPrice: number | string, area: number | string) => {
-        const numPrice = typeof totalPrice === 'string' ? parseFloat(totalPrice) : totalPrice
-        const numArea = typeof area === 'string' ? parseFloat(area) : area
-
-        const pricePerM2 = numPrice / numArea
-
-        return formatVNPrice(pricePerM2)
-    }
-
     const handleToggleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault()
 
@@ -124,13 +95,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, className, queryKey }) => {
                     <span>{post.category.name}</span>
                 </div>
 
-                <div className="mt-1 flex items-center gap-2 text-sm text-zinc-500">
-                    <span className="text-lg font-bold text-red-500">{formatVNPrice(post.detail.price)}</span>
-                    <span className="text-sm">
-                        {calculatePricePerM2(post.detail.price, post.detail.area).replace('triệu', 'tr')}/m²
-                    </span>
-                    <span className="text-sm">{post.detail.area} m²</span>
-                </div>
+                <PricePerMeter price={post.detail.price} area={post.detail.area} />
 
                 <div className="mt-1 flex gap-2 text-zinc-500">
                     <MapPin size={16} className="mt-[2px]" />
