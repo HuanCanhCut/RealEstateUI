@@ -19,6 +19,8 @@ export const getPosts = async ({
     category_id,
     location,
     approval_status,
+    min_price,
+    max_price,
 }: {
     page: number
     per_page: number
@@ -26,6 +28,8 @@ export const getPosts = async ({
     category_id?: number | null
     location?: string
     approval_status?: 'approved' | 'pending' | 'rejected' | 'all'
+    min_price?: number | null
+    max_price?: number | null
 }): Promise<APIResponsePagination<PostModel[]>> => {
     const response = await request.get(`/posts`, {
         params: {
@@ -35,6 +39,8 @@ export const getPosts = async ({
             category_id,
             location,
             approval_status,
+            min_price,
+            max_price,
         },
     })
     return response.data

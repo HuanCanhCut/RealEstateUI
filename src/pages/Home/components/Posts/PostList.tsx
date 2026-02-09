@@ -24,8 +24,24 @@ const PER_PAGE = 10
 const PostList: React.FC<PostListProps> = ({ className }) => {
     const [activeTab, setActiveTab] = useState<TabValue>('all')
     const [categoryId, setCategoryId] = useState<number | null>(null)
+    const [location, setLocation] = useState<{
+        province: string
+        district: string
+        ward: string
+    }>({
+        province: '',
+        district: '',
+        ward: '',
+    })
+    const [priceRange, setPriceRange] = useState<{
+        min: number | null
+        max: number | null
+    }>({
+        min: null,
+        max: null,
+    })
 
-    const queryKey = ['posts', activeTab, categoryId]
+    const queryKey = ['posts', activeTab, categoryId, location.province, priceRange.min, priceRange.max]
 
     const {
         data: postsData,
@@ -39,6 +55,9 @@ const PostList: React.FC<PostListProps> = ({ className }) => {
                 page: pageParam,
                 role: activeTab === 'all' ? undefined : activeTab === 'personal' ? 'personal' : 'agent',
                 category_id: categoryId,
+                location: location.province,
+                min_price: priceRange.min,
+                max_price: priceRange.max,
             })
         },
         getNextPageParam: (lastPage) => {
@@ -67,6 +86,25 @@ const PostList: React.FC<PostListProps> = ({ className }) => {
     useEffect(() => {
         const remove = listenEvent('SELECT_CATEGORY', ({ category_id }) => {
             setCategoryId(category_id)
+        })
+
+        return remove
+    }, [])
+
+    useEffect(() => {
+        const remove = listenEvent('SELECT_LOCATION', ({ location }) => {
+            setLocation(location)
+        })
+
+        return remove
+    }, [])
+
+    useEffect(() => {
+        const remove = listenEvent('SELECT_PRICE_RANGE', ({ minPrice, maxPrice }) => {
+            setPriceRange({
+                min: minPrice,
+                max: maxPrice,
+            })
         })
 
         return remove

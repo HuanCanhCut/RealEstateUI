@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { ChevronLeft, MapPin } from 'lucide-react'
 import type { Instance, Props } from 'tippy.js'
@@ -6,7 +6,7 @@ import type { Instance, Props } from 'tippy.js'
 import Button from '../Button'
 import CustomTippy from '../CustomTippy/CustomTippy'
 import PopperWrapper from '../PopperWrapper'
-import { sendEvent } from '~/helpers/events'
+import { listenEvent, sendEvent } from '~/helpers/events'
 import { cn } from '~/utils/cn'
 
 interface LocationSelectProps {
@@ -65,6 +65,26 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ className }) => {
             value: 'ward',
         },
     ]
+
+    useEffect(() => {
+        const remove = listenEvent('SELECT_PROVINCE', ({ province }) => {
+            setLocation((prev) => {
+                return {
+                    ...prev,
+                    province: province,
+                }
+            })
+
+            sendEvent('SELECT_LOCATION', {
+                location: {
+                    ...location,
+                    province: province,
+                },
+            })
+        })
+
+        return remove
+    }, [location])
 
     const handleSelect = async (type: keyof typeof location) => {
         switch (type) {
