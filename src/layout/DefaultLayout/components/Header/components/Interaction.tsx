@@ -39,7 +39,6 @@ const Interaction = () => {
 
                 dispatch(setCurrentUser(null))
 
-                navigate(config.routes.home)
                 navigate(0)
                 break
         }

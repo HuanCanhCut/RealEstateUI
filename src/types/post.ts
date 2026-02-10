@@ -25,7 +25,7 @@ export interface PostModel extends BaseModel {
     handover_status: 'not_delivered' | 'delivered'
     category_id: number
     user_id: number
-    role: 'user' | 'agent'
+    role: 'personal' | 'agent'
     is_liked?: boolean
     detail: PostDetailModel
     category: CategoryModel

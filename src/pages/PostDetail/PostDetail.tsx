@@ -4,16 +4,23 @@ import { Clock, MapPin } from 'lucide-react'
 import moment from 'moment-timezone'
 
 import Carousel from './Carousel'
+import Detail from './Detail'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import Button from '~/components/Button'
 import { HeartIconRegular, HeartIconSolid } from '~/components/Icons/Icons'
+import PopperWrapper from '~/components/PopperWrapper'
 import PricePerMeter from '~/components/Price'
-import { queryClient } from '~/main'
+import UserAvatar from '~/components/UserAvatar/UserAvatar'
+import { queryClient } from '~/lib/queryClient'
+import { selectCurrentUser } from '~/redux/selector'
+import { useAppSelector } from '~/redux/types'
 import * as postService from '~/services/postService'
 import type { APIResponse } from '~/types/common'
 import type { PostModel } from '~/types/post'
 
 const PostDetailPage = () => {
+    const currentUser = useAppSelector(selectCurrentUser)
+
     const { id } = useParams()
     const navigate = useNavigate()
 
@@ -64,8 +71,8 @@ const PostDetailPage = () => {
     }
 
     return (
-        <div className="container mx-auto mt-6 xl:max-w-7xl">
-            <div className="grid grid-cols-12">
+        <div className="container mx-auto py-6 xl:max-w-7xl">
+            <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-12 lg:col-span-7">
                     <div className="rounded-md bg-white p-6 shadow-md">
                         <Carousel slider={JSON.parse(post?.data.images || '[]')} />
@@ -108,8 +115,61 @@ const PostDetailPage = () => {
                             </Button>
                         </div>
                     </div>
+
+                    {post?.data && <Detail post={post.data} />}
                 </div>
-                <div className="col-span-12 lg:col-span-5"></div>
+                <div className="col-span-12 lg:col-span-5">
+                    <PopperWrapper className="rounded-md p-4">
+                        {post?.data.user_id === currentUser?.id ? (
+                            <div className="max-w-full">
+                                <h3 className="text-lg font-bold">Quản lý bài viết</h3>
+                                <div className="mt-4 flex max-w-full gap-3">
+                                    <Button variant={'secondary'} className="flex-1">
+                                        Xóa
+                                    </Button>
+                                    <Button variant={'default'} className="flex-1">
+                                        Chỉnh sửa
+                                    </Button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div>
+                                <div className="flex gap-3">
+                                    <UserAvatar src={post?.data.user.avatar} className="size-12" />
+                                    <div>
+                                        <p className="text-lg font-semibold">{post?.data.user.full_name}</p>
+                                        <p className="text-sm text-zinc-500">
+                                            {post?.data.role === 'personal' ? 'Cá nhân' : 'Môi giới'}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="mt-4 flex gap-3 text-sm text-zinc-500">
+                                    <span>{post?.data.user.post_count} tin đăng</span>
+                                    <span>
+                                        {moment
+                                            .tz(post?.data.user.created_at, 'Asia/Ho_Chi_Minh')
+                                            .fromNow()
+                                            .replace('trước', '')}{' '}
+                                        trên <span className="text-primary font-semibold">RealEstate</span>
+                                    </span>
+                                </div>
+
+                                <div className="mt-4 flex gap-3">
+                                    <Button
+                                        className="border-primary/50 text-primary flex-1 border"
+                                        variant={'outline'}
+                                    >
+                                        Ký hợp đồng online
+                                    </Button>
+                                    <Button className="border-primary/50 flex-1 border" variant={'default'}>
+                                        {post?.data.user.phone_number || 'Không có số điện thoại'}
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                    </PopperWrapper>
+                </div>
             </div>
         </div>
     )

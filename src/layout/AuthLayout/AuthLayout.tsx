@@ -20,7 +20,7 @@ const AuthLayout = () => {
                 <Outlet />
                 <footer className="mt-4 text-center text-[13px] text-gray-500 dark:text-gray-400">
                     Việc bạn tiếp tục sử dụng trang web này có nghĩa bạn đồng ý với{' '}
-                    <span className="text-(--primary)">điều khoản</span> sử dụng của chúng tôi
+                    <span className="text-primary">điều khoản</span> sử dụng của chúng tôi
                 </footer>
             </div>
             <div className="relative col-span-6 hidden h-dvh sm:block">

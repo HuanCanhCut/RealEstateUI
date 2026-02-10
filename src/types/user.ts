@@ -12,6 +12,7 @@ export interface UserModel extends BaseModel {
     phone_number?: string
     is_active: boolean
     is_blocked: boolean
+    post_count?: number
 }
 
 export interface UserResponse {
