@@ -4,6 +4,7 @@ import { Clock, MapPin } from 'lucide-react'
 import moment from 'moment-timezone'
 
 import Carousel from './Carousel'
+import Comment from './Comment'
 import Detail from './Detail'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import Button from '~/components/Button'
@@ -118,57 +119,62 @@ const PostDetailPage = () => {
 
                     {post?.data && <Detail post={post.data} />}
                 </div>
+
                 <div className="col-span-12 lg:col-span-5">
-                    <PopperWrapper className="rounded-md p-4">
-                        {post?.data.user_id === currentUser?.id ? (
-                            <div className="max-w-full">
-                                <h3 className="text-lg font-bold">Quản lý bài viết</h3>
-                                <div className="mt-4 flex max-w-full gap-3">
-                                    <Button variant={'secondary'} className="flex-1">
-                                        Xóa
-                                    </Button>
-                                    <Button variant={'default'} className="flex-1">
-                                        Chỉnh sửa
-                                    </Button>
-                                </div>
-                            </div>
-                        ) : (
-                            <div>
-                                <div className="flex gap-3">
-                                    <UserAvatar src={post?.data.user.avatar} className="size-12" />
-                                    <div>
-                                        <p className="text-lg font-semibold">{post?.data.user.full_name}</p>
-                                        <p className="text-sm text-zinc-500">
-                                            {post?.data.role === 'personal' ? 'Cá nhân' : 'Môi giới'}
-                                        </p>
+                    <div className="sticky top-[calc(var(--header-height)+24px)] flex h-full max-h-[calc(100dvh-var(--header-height)-48px)] flex-col">
+                        <PopperWrapper className="rounded-md p-4">
+                            {post?.data.user_id === currentUser?.id ? (
+                                <div className="max-w-full">
+                                    <h3 className="text-lg font-bold">Quản lý bài viết</h3>
+                                    <div className="mt-4 flex max-w-full gap-3">
+                                        <Button variant={'secondary'} className="flex-1">
+                                            Xóa
+                                        </Button>
+                                        <Button variant={'default'} className="flex-1">
+                                            Chỉnh sửa
+                                        </Button>
                                     </div>
                                 </div>
+                            ) : (
+                                <div>
+                                    <div className="flex gap-3">
+                                        <UserAvatar src={post?.data.user.avatar} className="size-12" />
+                                        <div>
+                                            <p className="text-lg font-semibold">{post?.data.user.full_name}</p>
+                                            <p className="text-sm text-zinc-500">
+                                                {post?.data.role === 'personal' ? 'Cá nhân' : 'Môi giới'}
+                                            </p>
+                                        </div>
+                                    </div>
 
-                                <div className="mt-4 flex gap-3 text-sm text-zinc-500">
-                                    <span>{post?.data.user.post_count} tin đăng</span>
-                                    <span>
-                                        {moment
-                                            .tz(post?.data.user.created_at, 'Asia/Ho_Chi_Minh')
-                                            .fromNow()
-                                            .replace('trước', '')}{' '}
-                                        trên <span className="text-primary font-semibold">RealEstate</span>
-                                    </span>
-                                </div>
+                                    <div className="mt-4 flex gap-3 text-sm text-zinc-500">
+                                        <span>{post?.data.user.post_count} tin đăng</span>
+                                        <span>
+                                            {moment
+                                                .tz(post?.data.user.created_at, 'Asia/Ho_Chi_Minh')
+                                                .fromNow()
+                                                .replace('trước', '')}{' '}
+                                            trên <span className="text-primary font-semibold">RealEstate</span>
+                                        </span>
+                                    </div>
 
-                                <div className="mt-4 flex gap-3">
-                                    <Button
-                                        className="border-primary/50 text-primary flex-1 border"
-                                        variant={'outline'}
-                                    >
-                                        Ký hợp đồng online
-                                    </Button>
-                                    <Button className="border-primary/50 flex-1 border" variant={'default'}>
-                                        {post?.data.user.phone_number || 'Không có số điện thoại'}
-                                    </Button>
+                                    <div className="mt-4 flex gap-3">
+                                        <Button
+                                            className="border-primary/50 text-primary flex-1 border"
+                                            variant={'outline'}
+                                        >
+                                            Ký hợp đồng online
+                                        </Button>
+                                        <Button className="border-primary/50 flex-1 border" variant={'default'}>
+                                            {post?.data.user.phone_number || 'Không có số điện thoại'}
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </PopperWrapper>
+                            )}
+                        </PopperWrapper>
+
+                        <Comment className="mt-4 flex-1" postId={Number(id)} />
+                    </div>
                 </div>
             </div>
         </div>

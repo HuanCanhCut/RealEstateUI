@@ -138,7 +138,7 @@ const PostList: React.FC<PostListProps> = ({ className }) => {
             </div>
 
             <InfiniteScroll
-                dataLength={postsData?.pages.length || 0}
+                dataLength={postsData?.pages.flatMap((page) => page.data).length || 0}
                 next={fetchNextPage}
                 className="mt-4 grid grid-cols-12 gap-4 overflow-hidden!"
                 hasMore={hasNextPage}
