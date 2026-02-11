@@ -57,3 +57,9 @@ export const getPostById = async ({ postId }: { postId: number }): Promise<APIRe
 
     return response.data
 }
+
+export const deletePost = async ({ postId }: { postId: number }) => {
+    const response = await request.del(`/posts/${postId}`)
+
+    return response.data
+}

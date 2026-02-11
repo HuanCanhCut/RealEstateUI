@@ -1,17 +1,20 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { Clock, MapPin } from 'lucide-react'
 import moment from 'moment-timezone'
+import { toast } from 'sonner'
 
 import Carousel from './Carousel'
 import Comment from './Comment'
 import Detail from './Detail'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import Button from '~/components/Button'
+import ConfirmModal from '~/components/ConfirmModal'
 import { HeartIconRegular, HeartIconSolid } from '~/components/Icons/Icons'
 import PopperWrapper from '~/components/PopperWrapper'
 import PricePerMeter from '~/components/Price'
 import UserAvatar from '~/components/UserAvatar/UserAvatar'
+import config from '~/config'
 import socket from '~/helpers/socket'
 import { queryClient } from '~/lib/queryClient'
 import { selectCurrentUser } from '~/redux/selector'
@@ -19,9 +22,11 @@ import { useAppSelector } from '~/redux/types'
 import * as postService from '~/services/postService'
 import type { APIResponse } from '~/types/common'
 import type { PostModel } from '~/types/post'
+import handleApiError from '~/utils/handleApiError'
 
 const PostDetailPage = () => {
     const currentUser = useAppSelector(selectCurrentUser)
+    const [isOpenModal, setIsOpenModal] = useState(false)
 
     const { id } = useParams()
     const navigate = useNavigate()
@@ -80,8 +85,30 @@ const PostDetailPage = () => {
         mutate(post?.data.id || 0)
     }
 
+    const handleDeletePost = () => {
+        try {
+            postService.deletePost({ postId: Number(id) })
+
+            toast.success('Xóa bài đăng thành công')
+
+            navigate(config.routes.home)
+        } catch (error) {
+            handleApiError({ error })
+        }
+    }
+
     return (
         <div className="container mx-auto py-6 xl:max-w-7xl">
+            <ConfirmModal
+                isOpen={isOpenModal}
+                title="Bạn có chắc chắn?"
+                content="Việc xóa bài đăng này sẽ không thể khôi phục lại"
+                confirmFn={handleDeletePost}
+                cancelFn={() => {
+                    setIsOpenModal(false)
+                }}
+            />
+
             <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-12 lg:col-span-7">
                     <div className="rounded-md bg-white p-6 shadow-md">
@@ -136,7 +163,13 @@ const PostDetailPage = () => {
                                 <div className="max-w-full">
                                     <h3 className="text-lg font-bold">Quản lý bài viết</h3>
                                     <div className="mt-4 flex max-w-full gap-3">
-                                        <Button variant={'secondary'} className="flex-1">
+                                        <Button
+                                            variant={'secondary'}
+                                            className="flex-1"
+                                            onClick={() => {
+                                                setIsOpenModal(true)
+                                            }}
+                                        >
                                             Xóa
                                         </Button>
                                         <Button variant={'default'} className="flex-1">

@@ -208,29 +208,35 @@ const Comment: React.FC<CommentProps> = ({ className, postId }) => {
             </div>
 
             <div className="flex-1 overflow-y-auto" id="comment-scrollable">
-                <InfiniteScroll
-                    dataLength={comments?.pages.flatMap((page) => page.data).length || 0}
-                    next={fetchNextPage}
-                    className="overflow-hidden! p-3 pt-0"
-                    hasMore={hasNextPage}
-                    loader={
-                        <div className="flex justify-center">
-                            <Spinner />
-                        </div>
-                    }
-                    scrollThreshold="100px"
-                    scrollableTarget="comment-scrollable"
-                >
-                    {comments?.pages
-                        .flatMap((page) => page.data)
-                        .map((comment) => {
-                            return (
-                                <React.Fragment key={comment.id}>
-                                    <CommentItem comment={comment} level={0} postId={postId} />
-                                </React.Fragment>
-                            )
-                        })}
-                </InfiniteScroll>
+                {comments?.pages[0].meta.total_comments === 0 ? (
+                    <div className="flex h-full items-center justify-center">
+                        <h2 className="font-medium">Chưa có bình luận nào</h2>
+                    </div>
+                ) : (
+                    <InfiniteScroll
+                        dataLength={comments?.pages.flatMap((page) => page.data).length || 0}
+                        next={fetchNextPage}
+                        className="overflow-hidden! p-3 pt-0"
+                        hasMore={hasNextPage}
+                        loader={
+                            <div className="flex justify-center">
+                                <Spinner />
+                            </div>
+                        }
+                        scrollThreshold="100px"
+                        scrollableTarget="comment-scrollable"
+                    >
+                        {comments?.pages
+                            .flatMap((page) => page.data)
+                            .map((comment) => {
+                                return (
+                                    <React.Fragment key={comment.id}>
+                                        <CommentItem comment={comment} level={0} postId={postId} />
+                                    </React.Fragment>
+                                )
+                            })}
+                    </InfiniteScroll>
+                )}
             </div>
 
             <CommentComposer />

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useNavigate } from 'react-router'
-import { LogOutIcon, UserIcon } from 'lucide-react'
+import { Bell, LogOutIcon, UserIcon } from 'lucide-react'
 import type { Instance, Props } from 'tippy.js'
 
 import MenuItem from './MenuItem'
@@ -20,6 +20,7 @@ export interface MenuItemType {
     label: string
     line?: boolean
     href?: string
+    destructive?: boolean
 }
 
 const Interaction = () => {
@@ -47,45 +48,55 @@ const Interaction = () => {
     const userMenu: MenuItemType[] = [
         {
             type: 'profile',
-            icon: <UserIcon />,
+            icon: <UserIcon size={18} />,
             href: `${config.routes.userProfile.replace(':nickname', `@${currentUser?.nickname || ''}`)}`,
             label: 'Hồ sơ cá nhân',
         },
         {
             line: true,
             type: 'logout',
-            icon: <LogOutIcon />,
+            icon: <LogOutIcon size={18} />,
             label: 'Đăng xuất',
+            destructive: true,
         },
     ]
 
     return (
         <>
             {currentUser ? (
-                <CustomTippy
-                    renderItem={() => (
-                        <PopperWrapper className="max-w-[280px] min-w-[280px] p-0 text-sm">
-                            <section>
-                                {userMenu.map((item: MenuItemType, index: number) => (
-                                    <React.Fragment key={index}>
-                                        <MenuItem item={item} onChoose={handleChoose} />
-                                    </React.Fragment>
-                                ))}
-                            </section>
-                        </PopperWrapper>
-                    )}
-                    onShow={(instance) => {
-                        tippyInstanceRef.current = instance
-                    }}
-                    placement="bottom-start"
-                    offsetY={10}
-                    timeDelayOpen={50}
-                    timeDelayClose={250}
-                >
-                    <UserAvatar src={currentUser.avatar} />
-                </CustomTippy>
-            ) : (
                 <div className="flex items-center gap-2">
+                    <Button variant={'default'} className="hidden md:flex">
+                        Quản lý tin đăng
+                    </Button>
+                    <Button variant={'secondary'} className="hidden md:flex">
+                        Đăng tin
+                    </Button>
+
+                    <CustomTippy
+                        renderItem={() => (
+                            <PopperWrapper className="max-w-70 min-w-70 p-0 text-sm">
+                                <section>
+                                    {userMenu.map((item: MenuItemType, index: number) => (
+                                        <React.Fragment key={index}>
+                                            <MenuItem item={item} onChoose={handleChoose} />
+                                        </React.Fragment>
+                                    ))}
+                                </section>
+                            </PopperWrapper>
+                        )}
+                        onShow={(instance) => {
+                            tippyInstanceRef.current = instance
+                        }}
+                        placement="bottom-start"
+                        offsetY={10}
+                        timeDelayOpen={50}
+                        timeDelayClose={250}
+                    >
+                        <UserAvatar src={currentUser.avatar} />
+                    </CustomTippy>
+                </div>
+            ) : (
+                <div className="hidden items-center gap-2 sm:flex">
                     <Button
                         variant={'outline'}
                         to={`${config.routes.register}?redirect_to=${window.location.pathname}`}

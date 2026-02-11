@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router'
 
 import type { MenuItemType } from './Interaction'
 import Button from '~/components/Button'
+import { cn } from '~/utils/cn'
 
 interface MenuItemProps {
     item: MenuItemType
@@ -23,7 +24,11 @@ const MenuItem = ({ item, onChoose }: MenuItemProps) => {
 
     return (
         <div
-            className={`flex w-full cursor-pointer items-center justify-between gap-2 px-2 py-1 select-none hover:bg-gray-100 dark:hover:bg-[#2d2d2f] ${item.line ? 'border-t border-gray-300 dark:border-zinc-700' : ''}`}
+            className={cn(
+                'flex w-full cursor-pointer items-center justify-between gap-2 px-2 py-1 select-none hover:bg-gray-100',
+                item.line ? 'border-t border-gray-300' : '',
+                item.destructive ? 'text-destructive' : '',
+            )}
             onClick={handleChoose}
         >
             <div className="flex items-center gap-2">

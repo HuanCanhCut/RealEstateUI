@@ -21,6 +21,8 @@ interface AppEvents {
     REPLY_COMMENT: {
         comment: CommentModel
     }
+
+    TOGGLE_MOBILE_SIDEBAR: undefined
 }
 
 export type { AppEvents }

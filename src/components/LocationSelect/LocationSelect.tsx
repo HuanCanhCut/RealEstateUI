@@ -280,7 +280,9 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ className }) => {
                 )}
             >
                 <MapPin size={16} />
-                <span className="whitespace-nowrap select-none">{location.province || 'Chọn vị trí'}</span>
+                <span className="hidden whitespace-nowrap select-none md:block">
+                    {location.province || 'Chọn vị trí'}
+                </span>
             </div>
         </CustomTippy>
     )
