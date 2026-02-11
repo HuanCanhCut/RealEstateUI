@@ -53,6 +53,10 @@ const Comment: React.FC<CommentProps> = ({ className, postId }) => {
                 return
             }
 
+            if (!data) {
+                return
+            }
+
             queryClient.setQueryData(
                 ['comments', postId],
                 (old: InfiniteData<CommentResponse, unknown> | undefined) => {
@@ -61,22 +65,23 @@ const Comment: React.FC<CommentProps> = ({ className, postId }) => {
                     }
 
                     // root comment
-                    if (!data?.parent_id) {
-                        console.log('if')
-
+                    if (!data.parent_id) {
                         return {
                             ...old,
-                            pages: old.pages.map((page, i) => ({
-                                ...page,
-                                data: i === 0 ? [data, ...page.data] : page.data,
-                                meta: {
-                                    ...page.meta,
-                                    pagination: {
-                                        ...page.meta.pagination,
-                                        total: page.meta.pagination.total + 1,
+                            pages: old.pages.map(
+                                (page, i): CommentResponse => ({
+                                    ...page,
+                                    data: i === 0 ? [data, ...page.data] : page.data,
+                                    meta: {
+                                        ...page.meta,
+                                        pagination: {
+                                            ...page.meta.pagination,
+                                            total: page.meta.pagination.total + 1,
+                                        },
+                                        total_comments: page.meta.total_comments + 1,
                                     },
-                                },
-                            })),
+                                }),
+                            ),
                         }
                     } else {
                         const addComment = (comments: CommentModel[]) => {
@@ -107,10 +112,17 @@ const Comment: React.FC<CommentProps> = ({ className, postId }) => {
                         // reply comment
                         return {
                             ...old,
-                            pages: old.pages.map((page: CommentResponse) => {
+                            pages: old.pages.map((page: CommentResponse): CommentResponse => {
                                 return {
                                     ...page,
                                     data: addComment(page.data),
+                                    meta: {
+                                        ...page.meta,
+                                        pagination: {
+                                            ...page.meta.pagination,
+                                            total: page.meta.pagination.total + 1,
+                                        },
+                                    },
                                 }
                             }),
                         }
@@ -123,6 +135,67 @@ const Comment: React.FC<CommentProps> = ({ className, postId }) => {
 
         return () => {
             socket.off('NEW_COMMENT', socketHandler)
+        }
+    }, [postId])
+
+    useEffect(() => {
+        const socketHandler = ({ data, meta }: { data: { comment_id: number }; meta: SocketMeta }) => {
+            if (!meta.success) {
+                toast.error(meta.error)
+                return
+            }
+
+            queryClient.setQueryData(
+                ['comments', postId],
+                (old: InfiniteData<CommentResponse, unknown> | undefined) => {
+                    if (!old) {
+                        return old
+                    }
+
+                    const removeComment = (comments: CommentModel[]): CommentModel[] => {
+                        return comments
+                            .map((comment): CommentModel | null => {
+                                if (comment.id === data.comment_id) {
+                                    return null
+                                }
+
+                                if (comment.replies && comment.replies.length > 0) {
+                                    return {
+                                        ...comment,
+                                        reply_count: comment.reply_count === 0 ? 0 : comment.reply_count - 1,
+                                        replies: removeComment(comment.replies),
+                                    }
+                                }
+
+                                return comment
+                            })
+                            .filter((comment): comment is CommentModel => comment !== null)
+                    }
+
+                    return {
+                        ...old,
+                        pages: old.pages.map((page: CommentResponse): CommentResponse => {
+                            return {
+                                ...page,
+                                data: removeComment(page.data),
+                                meta: {
+                                    pagination: {
+                                        ...page.meta.pagination,
+                                        total: page.meta.pagination.total - 1,
+                                    },
+                                    total_comments: page.meta.total_comments - 1,
+                                },
+                            }
+                        }),
+                    }
+                },
+            )
+        }
+
+        socket.on('DELETED_COMMENT', socketHandler)
+
+        return () => {
+            socket.off('DELETED_COMMENT', socketHandler)
         }
     }, [postId])
 

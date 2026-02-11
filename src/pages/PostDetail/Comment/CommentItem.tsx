@@ -1,16 +1,22 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
+import { useParams } from 'react-router'
 import { Copy, EllipsisIcon, Trash } from 'lucide-react'
 import { toast } from 'sonner'
 import type { Instance, Props } from 'tippy.js'
 
-import { type InfiniteData, useMutation } from '@tanstack/react-query'
+import { type InfiniteData, useMutation, useQuery } from '@tanstack/react-query'
 import Button from '~/components/Button'
+import ConfirmModal from '~/components/ConfirmModal'
 import CustomTippy from '~/components/CustomTippy/CustomTippy'
 import PopperWrapper from '~/components/PopperWrapper'
 import UserAvatar from '~/components/UserAvatar/UserAvatar'
 import { sendEvent } from '~/helpers/events'
+import socket from '~/helpers/socket'
 import { queryClient } from '~/lib/queryClient'
+import { selectCurrentUser } from '~/redux/selector'
+import { useAppSelector } from '~/redux/types'
 import * as commentService from '~/services/commentService'
+import * as postService from '~/services/postService'
 import type { CommentModel, CommentResponse } from '~/types/comment'
 import { cn } from '~/utils/cn'
 
@@ -21,7 +27,18 @@ interface CommentProps {
 }
 
 const CommentItem: React.FC<CommentProps> = ({ comment, level = 0, postId }) => {
+    const { id } = useParams()
+
+    const currentUser = useAppSelector(selectCurrentUser)
+
+    const [isModalOpen, setIsModalOpen] = useState(false)
+
     const tippyInstanceRef = useRef<Instance<Props> | null>(null)
+
+    const { data: post } = useQuery({
+        queryKey: ['post', id],
+        queryFn: () => postService.getPostById({ postId: Number(id) }),
+    })
 
     const { mutate } = useMutation({
         mutationFn: (commentId: number) => {
@@ -44,7 +61,7 @@ const CommentItem: React.FC<CommentProps> = ({ comment, level = 0, postId }) => 
                                 return { ...comment, replies: [...(comment.replies || []), ...(replies.data || [])] }
                             }
 
-                            if (comment?.replies && comment?.replies.length > 0) {
+                            if (comment?.replies) {
                                 return { ...comment, replies: addRepliesToComment(comment.replies) }
                             }
 
@@ -74,6 +91,11 @@ const CommentItem: React.FC<CommentProps> = ({ comment, level = 0, postId }) => 
         tippyInstanceRef.current?.hide()
     }
 
+    const handleOpenDeleteModal = () => {
+        setIsModalOpen(true)
+        tippyInstanceRef.current?.hide()
+    }
+
     const renderActions = () => {
         return (
             <PopperWrapper className="w-full">
@@ -81,10 +103,16 @@ const CommentItem: React.FC<CommentProps> = ({ comment, level = 0, postId }) => 
                     <Copy size={14} />
                     Sao chép
                 </Button>
-                <Button className="w-full text-red-500 hover:text-red-500" variant="ghost">
-                    <Trash size={14} />
-                    Xóa
-                </Button>
+                {currentUser?.id === comment.user.id && (
+                    <Button
+                        className="w-full text-red-500 hover:text-red-500"
+                        variant="ghost"
+                        onClick={handleOpenDeleteModal}
+                    >
+                        <Trash size={14} />
+                        Xóa
+                    </Button>
+                )}
             </PopperWrapper>
         )
     }
@@ -92,9 +120,12 @@ const CommentItem: React.FC<CommentProps> = ({ comment, level = 0, postId }) => 
     const handleReply = () => {
         sendEvent('REPLY_COMMENT', { comment })
 
-        if (!comment.replies && comment.reply_count > 0) {
-            handleShowReplies()
-        }
+        handleShowReplies()
+    }
+
+    const handleDeleteComment = () => {
+        setIsModalOpen(false)
+        socket.emit('DELETE_COMMENT', { comment_id: comment.id })
     }
 
     return (
@@ -104,11 +135,25 @@ const CommentItem: React.FC<CommentProps> = ({ comment, level = 0, postId }) => 
                 'border-l border-zinc-200 pl-2': level > 0,
             })}
         >
+            <ConfirmModal
+                isOpen={isModalOpen}
+                title="Bạn có chắc chắn?"
+                content="Việc xóa bình luận này sẽ xóa tất cả các trả lời bình luận và sẽ không thể khôi phục lại."
+                onRequestClose={() => setIsModalOpen(false)}
+                cancelFn={() => setIsModalOpen(false)}
+                confirmFn={handleDeleteComment}
+            />
+
             <div className="flex gap-2">
                 <UserAvatar src={comment.user.avatar} className="mt-1 size-10" />
                 <div className="flex flex-col">
                     <div className="w-fit rounded-md bg-slate-100/80 px-2 py-1">
-                        <p className="text-sm font-semibold">{comment.user.full_name}</p>
+                        <p className="text-sm font-semibold">
+                            {comment.user.full_name}{' '}
+                            <span className="text-primary text-xs font-normal">
+                                {post?.data.user_id === comment.user_id && '• Tác giả'}
+                            </span>
+                        </p>
                         <p className="text-base font-normal text-zinc-800">{comment.content}</p>
                     </div>
 
