@@ -1,24 +1,21 @@
+import type { CommentModel } from './comment'
+
 export interface SocketMeta {
     success: boolean
     error: string | null
 }
 
 interface ServerToClientEvents {
-    // NEW_MESSAGE: ({ data, meta }: { data: MessageModel; meta: SocketMeta }) => void
+    JOIN_POST_COMMENTS: ({ data, meta }: { data: { post_id: number }; meta: SocketMeta }) => void
+    LEAVE_POST_COMMENTS: ({ data, meta }: { data: { post_id: number }; meta: SocketMeta }) => void
+    NEW_COMMENT: ({ data, meta }: { data: CommentModel | null; meta: SocketMeta }) => void
+    COMMENT_REPLY_META: ({ data, meta }: { data: { comment_id: number; delta: number }; meta: SocketMeta }) => void
 }
 
 interface ClientToServerEvents {
-    // NEW_MESSAGE: ({
-    //     content,
-    //     parent_id,
-    //     type,
-    //     topic_uuid,
-    // }: {
-    //     content: string
-    //     parent_id?: number | null
-    //     type: 'text' | 'image'
-    //     topic_uuid: string
-    // }) => void
+    JOIN_POST_COMMENTS: ({ post_id }: { post_id: number }) => void
+    LEAVE_POST_COMMENTS: ({ post_id }: { post_id: number }) => void
+    NEW_COMMENT: ({ content, post_id, parent_id }: { content: string; post_id: number; parent_id?: number }) => void
 }
 
 interface InterServerEvents {

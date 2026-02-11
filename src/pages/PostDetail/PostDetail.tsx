@@ -12,6 +12,7 @@ import { HeartIconRegular, HeartIconSolid } from '~/components/Icons/Icons'
 import PopperWrapper from '~/components/PopperWrapper'
 import PricePerMeter from '~/components/Price'
 import UserAvatar from '~/components/UserAvatar/UserAvatar'
+import socket from '~/helpers/socket'
 import { queryClient } from '~/lib/queryClient'
 import { selectCurrentUser } from '~/redux/selector'
 import { useAppSelector } from '~/redux/types'
@@ -60,6 +61,14 @@ const PostDetailPage = () => {
             queryClient.setQueryData(['post', id], onMutateResult?.previousData)
         },
     })
+
+    useEffect(() => {
+        socket.emit('JOIN_POST_COMMENTS', { post_id: Number(id) })
+
+        return () => {
+            socket.emit('LEAVE_POST_COMMENTS', { post_id: Number(id) })
+        }
+    }, [id])
 
     useEffect(() => {
         if (isError) {

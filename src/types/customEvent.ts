@@ -1,3 +1,5 @@
+import type { CommentModel } from './comment'
+
 interface AppEvents {
     SELECT_LOCATION: {
         location: {
@@ -15,6 +17,9 @@ interface AppEvents {
     SELECT_PRICE_RANGE: {
         minPrice: number | null
         maxPrice: number | null
+    }
+    REPLY_COMMENT: {
+        comment: CommentModel
     }
 }
 

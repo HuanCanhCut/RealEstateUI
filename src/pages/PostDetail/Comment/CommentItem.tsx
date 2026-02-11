@@ -8,6 +8,7 @@ import Button from '~/components/Button'
 import CustomTippy from '~/components/CustomTippy/CustomTippy'
 import PopperWrapper from '~/components/PopperWrapper'
 import UserAvatar from '~/components/UserAvatar/UserAvatar'
+import { sendEvent } from '~/helpers/events'
 import { queryClient } from '~/lib/queryClient'
 import * as commentService from '~/services/commentService'
 import type { CommentModel, CommentResponse } from '~/types/comment'
@@ -88,6 +89,14 @@ const CommentItem: React.FC<CommentProps> = ({ comment, level = 0, postId }) => 
         )
     }
 
+    const handleReply = () => {
+        sendEvent('REPLY_COMMENT', { comment })
+
+        if (!comment.replies && comment.reply_count > 0) {
+            handleShowReplies()
+        }
+    }
+
     return (
         <div
             className={cn('pt-1', {
@@ -104,7 +113,12 @@ const CommentItem: React.FC<CommentProps> = ({ comment, level = 0, postId }) => 
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <p className="ml-2 cursor-pointer text-sm text-zinc-500 select-none hover:underline">Trả lời</p>
+                        <p
+                            className="ml-2 cursor-pointer text-sm text-zinc-500 select-none hover:underline"
+                            onClick={handleReply}
+                        >
+                            Trả lời
+                        </p>
                         <CustomTippy
                             renderItem={renderActions}
                             placement="bottom-start"
