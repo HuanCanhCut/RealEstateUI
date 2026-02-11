@@ -14,6 +14,7 @@ export interface CommentModel extends BaseModel {
 export interface CommentResponse {
     data: CommentModel[]
     meta: {
+        total_comments: number
         pagination: {
             total: number
             count: number

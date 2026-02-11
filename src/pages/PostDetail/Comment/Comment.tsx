@@ -43,14 +43,14 @@ const Comment: React.FC<CommentProps> = ({ className, postId }) => {
     })
 
     return (
-        <PopperWrapper className={cn('flex flex-col p-0', className)}>
+        <PopperWrapper className={cn('flex max-w-full flex-col p-0', className)}>
             <div className="border-primary/10 w-full border-b p-2">
                 <p className="text-primary text-center text-sm font-semibold">
-                    Bình luận ({comments?.pages[0].meta.pagination.total})
+                    Bình luận ({comments?.pages[0].meta.total_comments})
                 </p>
             </div>
 
-            <div className="flex-1" id="comment-scrollable">
+            <div className="flex-1 overflow-y-auto" id="comment-scrollable">
                 <InfiniteScroll
                     dataLength={comments?.pages.flatMap((page) => page.data).length || 0}
                     next={fetchNextPage}

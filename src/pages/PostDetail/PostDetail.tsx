@@ -122,7 +122,7 @@ const PostDetailPage = () => {
 
                 <div className="col-span-12 lg:col-span-5">
                     <div className="sticky top-[calc(var(--header-height)+24px)] flex h-full max-h-[calc(100dvh-var(--header-height)-48px)] flex-col">
-                        <PopperWrapper className="rounded-md p-4">
+                        <PopperWrapper className="max-w-full rounded-md p-4">
                             {post?.data.user_id === currentUser?.id ? (
                                 <div className="max-w-full">
                                     <h3 className="text-lg font-bold">Quản lý bài viết</h3>

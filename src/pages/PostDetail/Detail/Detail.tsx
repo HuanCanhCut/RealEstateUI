@@ -88,7 +88,7 @@ const Detail: React.FC<DetailProps> = ({ post }) => {
                 })}
             </PopperWrapper>
 
-            <PopperWrapper className="mt-6 p-4">
+            <PopperWrapper className="mt-6 max-w-full p-4">
                 <h2 className="text-xl font-bold">Mô tả chi tiết</h2>
                 <p className="mt-2 whitespace-pre-wrap text-zinc-700">{post.description}</p>
             </PopperWrapper>
