@@ -5,7 +5,7 @@ import MobileSidebar from './components/MobileSidebar'
 
 const DefaultLayout = () => {
     return (
-        <div className="min-h-dvh bg-zinc-100">
+        <div className="min-h-dvh bg-slate-50">
             <MobileSidebar />
             <Header />
             <div className="pt-(--header-height)">

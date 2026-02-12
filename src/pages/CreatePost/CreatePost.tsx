@@ -162,7 +162,7 @@ const CreatePost = () => {
                     // remove preview
                     delete file.preview
 
-                    return uploadToCloudinary({ file, folder: 'real_estate', type: 'image' })
+                    return uploadToCloudinary({ file, folder: 'real_estate/post', type: 'image' })
                 }),
             )
 

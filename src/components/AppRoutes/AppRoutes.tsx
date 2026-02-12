@@ -10,6 +10,7 @@ import HomePage from '~/pages/Home/Home'
 import LoginPage from '~/pages/Login'
 import NotFoundPage from '~/pages/NotFound'
 import PostDetailPage from '~/pages/PostDetail'
+import Profile from '~/pages/Profile'
 import RegisterPage from '~/pages/Register'
 import VerifyPage from '~/pages/VerifyAccount'
 
@@ -28,6 +29,7 @@ const AppRoutes = () => {
                             </ProtectedRoute>
                         }
                     />
+                    <Route path="/user/:nickname" element={<Profile />} />
                 </Route>
 
                 <Route path="/auth" element={<AuthRoute />}>

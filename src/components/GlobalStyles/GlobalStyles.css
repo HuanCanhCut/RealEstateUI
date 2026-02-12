@@ -178,12 +178,6 @@ body {
     overflow-y: overlay;
 }
 
-body.ReactModal__Body--open {
-    overflow-y: scroll;
-    position: fixed;
-    width: 100%;
-}
-
 input,
 button {
     outline: none;
@@ -199,10 +193,9 @@ button {
     right: 0;
     left: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.3);
     z-index: 99;
     display: block;
-    backdrop-filter: blur(2px);
 }
 
 .modal {
@@ -213,6 +206,10 @@ button {
     border-radius: 10px;
     z-index: 999;
     outline: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 .ReactModal__Overlay {
