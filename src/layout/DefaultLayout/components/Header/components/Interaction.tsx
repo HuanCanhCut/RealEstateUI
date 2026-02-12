@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useNavigate } from 'react-router'
-import { Bell, LogOutIcon, UserIcon } from 'lucide-react'
+import { LogOutIcon, UserIcon } from 'lucide-react'
 import type { Instance, Props } from 'tippy.js'
 
 import MenuItem from './MenuItem'
@@ -68,7 +68,7 @@ const Interaction = () => {
                     <Button variant={'default'} className="hidden md:flex">
                         Quản lý tin đăng
                     </Button>
-                    <Button variant={'secondary'} className="hidden md:flex">
+                    <Button variant={'secondary'} className="hidden md:flex" to={config.routes.createPost}>
                         Đăng tin
                     </Button>
 

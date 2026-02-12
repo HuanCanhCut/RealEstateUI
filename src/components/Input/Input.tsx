@@ -10,7 +10,10 @@ const Input: React.FC<InputProps> = ({ className, type, ref, ...props }) => {
     return (
         <input
             type={type}
-            className={cn('w-full rounded-lg border border-gray-300 bg-gray-100 p-2 outline-none', className)}
+            className={cn(
+                'focus:border-primary w-full rounded-lg border border-slate-200 bg-gray-100 p-2 outline-none',
+                className,
+            )}
             ref={ref}
             {...props}
         />

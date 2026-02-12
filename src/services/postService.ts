@@ -63,3 +63,32 @@ export const deletePost = async ({ postId }: { postId: number }) => {
 
     return response.data
 }
+
+interface CreatePostParams {
+    title: string
+    description: string
+    administrative_address: string
+    sub_locality: string
+    type: 'sell' | 'rent'
+    images: string[]
+    category_id: number
+    role: 'personal' | 'agent'
+
+    post_detail: {
+        bedrooms: number
+        bathrooms: number
+        balcony: string
+        main_door: string
+        legal_documents: string
+        interior_status: string
+        area: number
+        price: number
+        deposit: number
+    }
+}
+
+export const createPost = async (data: CreatePostParams) => {
+    const response = await request.post(`/posts`, data)
+
+    return response.data
+}

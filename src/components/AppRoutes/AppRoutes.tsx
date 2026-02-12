@@ -1,8 +1,10 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
 
 import AuthRoute from './AuthRoute'
+import ProtectedRoute from './ProtectedRoute'
 import AuthLayout from '~/layout/AuthLayout'
 import DefaultLayout from '~/layout/DefaultLayout'
+import CreatePostPage from '~/pages/CreatePost'
 import ForgotPasswordPage from '~/pages/ForgotPassword'
 import HomePage from '~/pages/Home/Home'
 import LoginPage from '~/pages/Login'
@@ -18,7 +20,16 @@ const AppRoutes = () => {
                 <Route element={<DefaultLayout />}>
                     <Route index element={<HomePage />} />
                     <Route path="/post/:id" element={<PostDetailPage />} />
+                    <Route
+                        path="/post/create"
+                        element={
+                            <ProtectedRoute>
+                                <CreatePostPage />
+                            </ProtectedRoute>
+                        }
+                    />
                 </Route>
+
                 <Route path="/auth" element={<AuthRoute />}>
                     <Route element={<AuthLayout />}>
                         <Route path="login" element={<LoginPage />} />

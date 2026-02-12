@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { ChevronLeft, MapPin } from 'lucide-react'
+import { toast } from 'sonner'
 import type { Instance, Props } from 'tippy.js'
 
 import Button from '../Button'
@@ -11,6 +12,7 @@ import { cn } from '~/utils/cn'
 
 interface LocationSelectProps {
     className?: string
+    onSubmit?: (location: { province: string; district: string; ward: string }) => void
 }
 
 interface Ward {
@@ -37,7 +39,7 @@ interface SelectData {
     }
 }
 
-const LocationSelect: React.FC<LocationSelectProps> = ({ className }) => {
+const LocationSelect: React.FC<LocationSelectProps> = ({ className, onSubmit = () => {} }) => {
     const tippyInstance = useRef<Instance<Props> | null>(null)
 
     const [selectData, setSelectData] = useState<SelectData>({
@@ -101,6 +103,11 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ className }) => {
                 break
             case 'district':
                 {
+                    if (!location.province) {
+                        toast.warning('Vui lòng chọn tỉnh/thành phố trước')
+                        return
+                    }
+
                     setSelectData((prev) => {
                         return {
                             ...prev,
@@ -130,6 +137,11 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ className }) => {
                 }
                 break
             case 'ward':
+                if (!location.district) {
+                    toast.warning('Vui lòng chọn quận huyện trước')
+                    return
+                }
+
                 setSelectData((prev) => {
                     return {
                         ...prev,
@@ -141,18 +153,24 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ className }) => {
     }
 
     const handleClearAll = () => {
-        setLocation({
+        const location = {
             province: '',
             district: '',
             ward: '',
-        })
+        }
+
+        setLocation(location)
+        onSubmit(location)
 
         tippyInstance.current?.hide()
     }
 
     const handleApply = () => {
         sendEvent('SELECT_LOCATION', { location })
+
         tippyInstance.current?.hide()
+
+        onSubmit(location)
     }
 
     const render = () => {

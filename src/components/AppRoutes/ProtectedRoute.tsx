@@ -8,7 +8,7 @@ const AuthRoute = ({ children }: RouteProps) => {
     const currentUser = useAppSelector(selectCurrentUser)
 
     if (!currentUser) {
-        return <Navigate to={config.routes.login} replace />
+        return <Navigate to={config.routes.home} replace />
     }
 
     return children

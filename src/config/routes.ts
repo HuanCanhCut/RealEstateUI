@@ -28,6 +28,10 @@ const ALL_ROUTES = [
         key: 'postDetail',
     },
     {
+        path: '/post/create',
+        key: 'createPost',
+    },
+    {
         path: '/user/:@nickname',
         key: 'profile',
     },

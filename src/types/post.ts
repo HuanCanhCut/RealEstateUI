@@ -14,6 +14,7 @@ export interface PostDetailModel {
     price: number
     deposit: number
 }
+
 export interface PostModel extends BaseModel {
     title: string
     description: string

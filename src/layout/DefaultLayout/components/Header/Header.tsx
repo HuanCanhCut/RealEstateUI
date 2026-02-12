@@ -23,8 +23,8 @@ const Header = () => {
                     />
                 </Link>
 
-                <Button variant="ghost" size="icon" onClick={handleToggleSidebar}>
-                    <Menu className="size-4 cursor-pointer sm:hidden" />
+                <Button variant="ghost" size="icon" className="flex sm:hidden" onClick={handleToggleSidebar}>
+                    <Menu className="size-4 cursor-pointer" />
                 </Button>
 
                 <LocationSelect className="ml-4 hidden sm:flex" />
