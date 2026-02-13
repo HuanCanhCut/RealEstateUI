@@ -55,18 +55,18 @@ const MobileSidebar = () => {
     const USER_MENU = [
         ...MENU,
         {
-            title: 'Quản lý bài đăng',
-            to: '',
+            title: 'Quản lý tin đăng',
+            to: `${config.routes.profile.replace(':@nickname', `@${currentUser?.nickname}`)}?tab=pending`,
             icon: <SquareChartGantt size={16} />,
         },
         {
             title: 'Đăng tin',
-            to: '',
+            to: config.routes.createPost,
             icon: <ArrowsUpFromLine size={16} />,
         },
         {
             title: 'Tin đã thích',
-            to: '',
+            to: `${config.routes.profile.replace(':@nickname', `@${currentUser?.nickname}`)}?tab=liked`,
             icon: <Heart size={16} />,
         },
     ]
@@ -157,7 +157,13 @@ const MobileSidebar = () => {
 
                 <div className="mt-6 w-full">
                     {MENU_LIST().map((item) => (
-                        <Link key={item.title} to={item.to}>
+                        <Link
+                            key={item.title}
+                            to={item.to}
+                            onClick={() => {
+                                setIsSidebarOpen(false)
+                            }}
+                        >
                             <Button variant="ghost" className="mt-2 flex w-full justify-start">
                                 {item.icon}
                                 {item.title}

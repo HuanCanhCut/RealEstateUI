@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import ReactModal from 'react-modal'
 import { CameraIcon, XIcon } from 'lucide-react'
@@ -11,17 +11,13 @@ import Input from '~/components/Input'
 import PopperWrapper from '~/components/PopperWrapper'
 import Spinner from '~/components/Spinner'
 import UserAvatar from '~/components/UserAvatar/UserAvatar'
+import { listenEvent } from '~/helpers/events'
 import { setCurrentUser } from '~/redux/reducers/authSlice'
 import { selectCurrentUser } from '~/redux/selector'
 import { useAppDispatch, useAppSelector } from '~/redux/types'
 import * as meService from '~/services/meService'
 import handleApiError from '~/utils/handleApiError'
 import uploadToCloudinary from '~/utils/uploadToCloudinary'
-
-interface EditProfileProps {
-    isOpen: boolean
-    onClose: () => void
-}
 
 const editProfileSchema = z.object({
     fullName: z
@@ -41,8 +37,10 @@ const editProfileSchema = z.object({
 
 type FieldValue = z.infer<typeof editProfileSchema>
 
-const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
+const EditProfile = () => {
     const dispatch = useAppDispatch()
+
+    const [isOpen, setIsOpen] = useState(false)
 
     const currentUser = useAppSelector(selectCurrentUser)
 
@@ -62,6 +60,18 @@ const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
         },
         resolver: zodResolver(editProfileSchema),
     })
+
+    useEffect(() => {
+        const remove = listenEvent('TOGGLE_EDIT_PROFILE', () => {
+            setIsOpen((prev) => !prev)
+        })
+
+        return remove
+    }, [])
+
+    const onClose = () => {
+        setIsOpen(false)
+    }
 
     const handleChangeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0] as File & { preview?: string }

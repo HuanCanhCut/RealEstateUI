@@ -1,5 +1,9 @@
 const ALL_ROUTES = [
     {
+        path: '/admin',
+        key: 'admin',
+    },
+    {
         path: '/auth/login',
         key: 'login',
     },
@@ -34,6 +38,10 @@ const ALL_ROUTES = [
     {
         path: '/user/:@nickname',
         key: 'profile',
+    },
+    {
+        path: '/admin/dashboard',
+        key: 'dashboard',
     },
 ] as const
 

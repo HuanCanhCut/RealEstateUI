@@ -23,6 +23,8 @@ interface AppEvents {
     }
 
     TOGGLE_MOBILE_SIDEBAR: undefined
+
+    TOGGLE_EDIT_PROFILE: undefined
 }
 
 export type { AppEvents }

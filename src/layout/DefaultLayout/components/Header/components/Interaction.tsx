@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useNavigate } from 'react-router'
-import { LogOutIcon, UserIcon } from 'lucide-react'
+import { Heart, LayoutDashboard, LogOutIcon, UserIcon } from 'lucide-react'
 import type { Instance, Props } from 'tippy.js'
 
 import MenuItem from './MenuItem'
@@ -35,7 +35,6 @@ const Interaction = () => {
         switch (type) {
             case 'logout':
                 tippyInstanceRef.current?.hide()
-
                 await authService.logout()
 
                 dispatch(setCurrentUser(null))
@@ -46,11 +45,23 @@ const Interaction = () => {
     }
 
     const userMenu: MenuItemType[] = [
+        currentUser?.role === 'admin' && {
+            type: 'admin',
+            icon: <LayoutDashboard size={18} />,
+            href: config.routes.dashboard,
+            label: 'Dashboard',
+        },
         {
             type: 'profile',
             icon: <UserIcon size={18} />,
             href: `${config.routes.userProfile.replace(':nickname', `@${currentUser?.nickname || ''}`)}`,
             label: 'Hồ sơ cá nhân',
+        },
+        {
+            type: 'postsLiked',
+            icon: <Heart size={18} />,
+            href: `${config.routes.profile.replace(':@nickname', `@${currentUser?.nickname || ''}`)}?tab=liked`,
+            label: 'Tin đã thích',
         },
         {
             line: true,
@@ -59,7 +70,7 @@ const Interaction = () => {
             label: 'Đăng xuất',
             destructive: true,
         },
-    ]
+    ].filter(Boolean) as MenuItemType[]
 
     return (
         <>
@@ -78,7 +89,11 @@ const Interaction = () => {
                                 <section>
                                     {userMenu.map((item: MenuItemType, index: number) => (
                                         <React.Fragment key={index}>
-                                            <MenuItem item={item} onChoose={handleChoose} />
+                                            <MenuItem
+                                                item={item}
+                                                onChoose={handleChoose}
+                                                tippyInstanceRef={tippyInstanceRef}
+                                            />
                                         </React.Fragment>
                                     ))}
                                 </section>

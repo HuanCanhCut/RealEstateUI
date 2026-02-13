@@ -1,6 +1,7 @@
 'use client'
 
 import { useNavigate } from 'react-router'
+import type { Instance, Props } from 'tippy.js'
 
 import type { MenuItemType } from './Interaction'
 import Button from '~/components/Button'
@@ -9,14 +10,16 @@ import { cn } from '~/utils/cn'
 interface MenuItemProps {
     item: MenuItemType
     onChoose: (type: MenuItemType['type']) => void
+    tippyInstanceRef: React.RefObject<Instance<Props> | null>
 }
 
-const MenuItem = ({ item, onChoose }: MenuItemProps) => {
+const MenuItem = ({ item, onChoose, tippyInstanceRef }: MenuItemProps) => {
     const navigate = useNavigate()
 
     const handleChoose = () => {
         if (item.href) {
             navigate(item.href)
+            tippyInstanceRef.current?.hide()
         } else {
             onChoose(item.type)
         }

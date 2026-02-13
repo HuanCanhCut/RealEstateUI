@@ -10,7 +10,11 @@ import Button from '~/components/Button'
 import Input from '~/components/Input'
 import Label from '~/components/Label/Label'
 import LocationSelect from '~/components/LocationSelect'
+import Spinner from '~/components/Spinner'
 import { Textarea } from '~/components/Textarea/Textarea'
+import { sendEvent } from '~/helpers/events'
+import { selectCurrentUser } from '~/redux/selector'
+import { useAppSelector } from '~/redux/types'
 import * as categoryServices from '~/services/categoryService'
 import * as postService from '~/services/postService'
 import handleApiError from '~/utils/handleApiError'
@@ -20,23 +24,6 @@ interface Location {
     province: string
     district: string
     ward: string
-}
-
-interface FieldValue {
-    category_id: string
-    sub_locality: string
-    administrative_address: string
-    bedrooms: number
-    bathrooms: number
-    balcony: string
-    main_door: string
-    legal_documents: string
-    interior_status: string
-    area: number
-    price: number
-    deposit: number
-    title: string
-    description: string
 }
 
 const createPostSchema = z
@@ -109,12 +96,16 @@ const createPostSchema = z
         path: ['administrative_address'],
     })
 
+type FieldValue = z.infer<typeof createPostSchema>
+
 const CreatePost = () => {
+    const currentUser = useAppSelector(selectCurrentUser)
+
     const {
         register,
         handleSubmit,
         setValue,
-        formState: { errors },
+        formState: { isSubmitting, errors },
     } = useForm({
         resolver: zodResolver(createPostSchema),
         mode: 'onChange',
@@ -150,6 +141,17 @@ const CreatePost = () => {
     const handleCreatePost = async (data: FieldValue) => {
         if (files.length === 0) {
             toast.error('Vui lòng tải lên ít nhất 1 hình ảnh')
+            return
+        }
+
+        if (!currentUser) {
+            toast.error('Vui lòng đăng nhập để tạo bài đăng')
+            return
+        }
+
+        if (!currentUser.phone_number || !currentUser.address) {
+            toast.info('Vui lòng cập nhật thông tin liên hệ và địa chỉ của bạn')
+            sendEvent('TOGGLE_EDIT_PROFILE')
             return
         }
 
@@ -375,8 +377,8 @@ const CreatePost = () => {
                         </div>
                     </div>
 
-                    <Button type="submit" className="mt-6 w-full">
-                        Đăng tin
+                    <Button type="submit" className="mt-6 w-full" disabled={isSubmitting}>
+                        {isSubmitting ? <Spinner /> : 'Đăng tin'}
                     </Button>
                 </form>
             </div>

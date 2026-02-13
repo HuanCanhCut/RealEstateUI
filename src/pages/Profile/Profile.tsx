@@ -4,13 +4,13 @@ import { useParams, useSearchParams } from 'react-router'
 import { AppWindowMac, Clock, CloudUpload, Heart, Phone } from 'lucide-react'
 import moment from 'moment'
 
-import EditProfile from '../../components/EditProfile'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import Button from '~/components/Button'
 import PopperWrapper from '~/components/PopperWrapper'
 import PostItem from '~/components/PostItem'
 import Spinner from '~/components/Spinner'
 import UserAvatar from '~/components/UserAvatar/UserAvatar'
+import { sendEvent } from '~/helpers/events'
 import { selectCurrentUser } from '~/redux/selector'
 import { useAppSelector } from '~/redux/types'
 import * as postService from '~/services/postService'
@@ -34,8 +34,6 @@ const Profile = () => {
     const [searchParams] = useSearchParams()
 
     const [activeTab, setActiveTab] = useState<TabValue>((searchParams.get('tab') as TabValue) || 'posts')
-
-    const [isOpenModal, setIsOpenModal] = useState(false)
 
     const currentUser = useAppSelector(selectCurrentUser)
 
@@ -116,8 +114,6 @@ const Profile = () => {
 
     return (
         <div className="container mx-auto mt-8 max-w-7xl">
-            <EditProfile isOpen={isOpenModal} onClose={() => setIsOpenModal(false)} />
-
             <div className="grid grid-cols-12">
                 <div className="col-span-12 md:col-span-3">
                     <PopperWrapper className="w-full max-w-full p-8 shadow-sm">
@@ -149,7 +145,11 @@ const Profile = () => {
                         </div>
 
                         {currentUser?.id === user?.data.id && (
-                            <Button variant="secondary" className="mt-8 w-full" onClick={() => setIsOpenModal(true)}>
+                            <Button
+                                variant="secondary"
+                                className="mt-8 w-full"
+                                onClick={() => sendEvent('TOGGLE_EDIT_PROFILE')}
+                            >
                                 Chỉnh sửa hồ sơ
                             </Button>
                         )}
@@ -157,7 +157,7 @@ const Profile = () => {
                 </div>
                 <div className="col-span-12 md:col-span-9">
                     <div className="px-4">
-                        <div className="flex w-full rounded-md bg-zinc-200 p-1">
+                        <div className="mt-3 flex w-full overflow-x-auto rounded-md bg-zinc-200 p-1 sm:mt-0">
                             {tabs.map((tab) => {
                                 return (
                                     <Button
@@ -165,7 +165,7 @@ const Profile = () => {
                                         variant="secondary"
                                         size="icon-sm"
                                         className={cn(
-                                            'flex-1 cursor-pointer bg-transparent font-semibold hover:bg-transparent',
+                                            'min-w-32 flex-1 cursor-pointer bg-transparent font-semibold hover:bg-transparent',
                                             {
                                                 'bg-white hover:bg-white': activeTab === tab.value,
                                                 hidden: tab.isShow === false,

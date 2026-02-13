@@ -207,7 +207,7 @@ const Comment: React.FC<CommentProps> = ({ className, postId }) => {
                 </p>
             </div>
 
-            <div className="flex-1 overflow-y-auto" id="comment-scrollable">
+            <div className="flex-1 overflow-y-auto py-2 sm:min-h-20" id="comment-scrollable">
                 {comments?.pages[0].meta.total_comments === 0 ? (
                     <div className="flex h-full items-center justify-center">
                         <h2 className="font-medium">Chưa có bình luận nào</h2>
