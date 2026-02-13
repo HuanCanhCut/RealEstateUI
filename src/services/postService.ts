@@ -92,3 +92,43 @@ export const createPost = async (data: CreatePostParams) => {
 
     return response.data
 }
+
+export const getUserPosts = async ({
+    userId,
+    page,
+    per_page,
+    favorite,
+}: {
+    userId: number
+    page: number
+    per_page: number
+    favorite?: string
+}): Promise<APIResponsePagination<PostModel[]>> => {
+    const response = await request.get(`/users/${userId}/posts`, {
+        params: {
+            page,
+            per_page,
+            favorite,
+        },
+    })
+    return response.data
+}
+
+export const getUserPostApproval = async ({
+    type,
+    page,
+    per_page,
+}: {
+    type: 'pending' | 'rejected'
+    page: number
+    per_page: number
+}) => {
+    const response = await request.get(`/users/posts/${type}`, {
+        params: {
+            page,
+            per_page,
+        },
+    })
+
+    return response.data
+}

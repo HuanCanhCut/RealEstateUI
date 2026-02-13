@@ -158,7 +158,13 @@ const EditProfile: React.FC<EditProfileProps> = ({ isOpen, onClose }) => {
                         Chỉnh sửa thông tin cá nhân của bạn tại đây. Nhấn lưu khi hoàn tất.
                     </p>
 
-                    <Button variant="ghost" size="icon-sm" className="absolute top-3 right-3" onClick={onClose}>
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-sm"
+                        className="absolute top-3 right-3"
+                        onClick={onClose}
+                    >
                         <XIcon className="size-4" />
                     </Button>
 

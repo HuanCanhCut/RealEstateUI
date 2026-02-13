@@ -1,6 +1,5 @@
 import type React from 'react'
 import { Link } from 'react-router'
-import { motion } from 'framer-motion'
 import { MapPin } from 'lucide-react'
 
 import Button from '../Button'
@@ -18,11 +17,10 @@ interface PostItemProps {
     post: PostModel
     className?: string
     queryKey: (string | number | null)[]
+    showLike: boolean
 }
 
-const AnimatedLink = motion.create(Link)
-
-const PostItem: React.FC<PostItemProps> = ({ post, className, queryKey }) => {
+const PostItem: React.FC<PostItemProps> = ({ post, className, queryKey, showLike }) => {
     const { mutate: toggleLikePost } = useMutation({
         mutationFn: (postId: number) => {
             return postService.handleToggleLikePost({ postId, type: post.is_liked ? 'unlike' : 'like' })
@@ -72,16 +70,12 @@ const PostItem: React.FC<PostItemProps> = ({ post, className, queryKey }) => {
     }
 
     return (
-        <AnimatedLink
+        <Link
             to={config.routes.postDetail.replace(':id', post.id.toString())}
             className={cn(
                 'relative max-w-full cursor-pointer overflow-hidden rounded-lg transition-shadow hover:shadow-[0px_5px_10px_rgba(0,0,0,0.2)]',
                 className,
             )}
-            transition={{ duration: 0.4 }}
-            initial={{ opacity: 0.5, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
         >
             <img className="aspect-square w-full rounded-lg object-cover" src={JSON.parse(post.images)[0]} alt="" />
 
@@ -106,7 +100,9 @@ const PostItem: React.FC<PostItemProps> = ({ post, className, queryKey }) => {
             <Button
                 variant="ghost"
                 size="icon"
-                className="flex-center absolute top-2 right-2 rounded-full hover:bg-slate-50/30"
+                className={cn('flex-center absolute top-2 right-2 rounded-full hover:bg-slate-50/30', {
+                    'hidden!': !showLike,
+                })}
                 onClick={handleToggleLike}
             >
                 {post.is_liked ? (
@@ -115,7 +111,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, className, queryKey }) => {
                     <HeartIconSolid className="fill-white" />
                 )}
             </Button>
-        </AnimatedLink>
+        </Link>
     )
 }
 

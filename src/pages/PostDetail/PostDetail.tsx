@@ -202,7 +202,7 @@ const PostDetailPage = () => {
 
                                     <div className="mt-4 flex gap-3">
                                         <Button
-                                            className="border-primary/50 text-primary flex-1 border"
+                                            className="border-primary/50 text-primary hover:text-primary flex-1 border"
                                             variant={'outline'}
                                         >
                                             Ký hợp đồng online
