@@ -17,10 +17,10 @@ interface PostItemProps {
     post: PostModel
     className?: string
     queryKey: (string | number | null)[]
-    showLike: boolean
+    showLike?: boolean
 }
 
-const PostItem: React.FC<PostItemProps> = ({ post, className, queryKey, showLike }) => {
+const PostItem: React.FC<PostItemProps> = ({ post, className, queryKey, showLike = true }) => {
     const { mutate: toggleLikePost } = useMutation({
         mutationFn: (postId: number) => {
             return postService.handleToggleLikePost({ postId, type: post.is_liked ? 'unlike' : 'like' })
@@ -77,7 +77,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, className, queryKey, showLike
                 className,
             )}
         >
-            <img className="aspect-square w-full rounded-lg object-cover" src={JSON.parse(post.images)[0]} alt="" />
+            <img className="aspect-square w-full rounded-lg object-cover" src={post.images[0]} alt="" />
 
             <div className="p-2">
                 <h2 className="mt-1 line-clamp-2 h-12 overflow-hidden text-base leading-6 font-normal whitespace-pre-wrap">
@@ -92,7 +92,7 @@ const PostItem: React.FC<PostItemProps> = ({ post, className, queryKey, showLike
                 <PricePerMeter price={post.detail.price} area={post.detail.area} />
 
                 <div className="mt-1 flex gap-2 text-zinc-500">
-                    <MapPin size={16} className="mt-[2px]" />
+                    <MapPin size={16} className="mt-0.5" />
                     <span className="text-sm">{post.administrative_address}</span>
                 </div>
             </div>

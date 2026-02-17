@@ -112,7 +112,7 @@ const PostDetailPage = () => {
             <div className="grid grid-cols-12 gap-4">
                 <div className="col-span-12 lg:col-span-7">
                     <div className="rounded-md bg-white p-6 shadow-md">
-                        <Carousel slider={JSON.parse(post?.data.images || '[]')} />
+                        <Carousel slider={post?.data.images || []} />
 
                         <div className="mt-4 flex items-start justify-between">
                             <div>
@@ -172,7 +172,11 @@ const PostDetailPage = () => {
                                         >
                                             Xóa
                                         </Button>
-                                        <Button variant={'default'} className="flex-1">
+                                        <Button
+                                            variant={'default'}
+                                            className="flex-1"
+                                            to={`${config.routes.createPost}?mode=edit&postId=${id}`}
+                                        >
                                             Chỉnh sửa
                                         </Button>
                                     </div>

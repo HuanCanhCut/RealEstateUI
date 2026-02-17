@@ -48,6 +48,9 @@ export default defineConfig([
                 },
             ],
             '@typescript-eslint/no-empty-object-type': 'warn',
+
+            // ===== React Hooks =====
+            // 'react-hooks/set-state-in-effect': 'off',
         },
     },
 ])

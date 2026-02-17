@@ -60,11 +60,7 @@ const Search = () => {
                         key={post.id}
                         className="flex cursor-pointer gap-2 rounded-sm p-2 hover:bg-gray-100/70"
                     >
-                        <img
-                            className="size-16 rounded-sm object-cover"
-                            src={JSON.parse(post.images || '[]')[0]}
-                            alt=""
-                        />
+                        <img className="size-16 rounded-sm object-cover" src={post.images[0]} alt="" />
                         <div>
                             <h3 className="text-base font-medium">{post.title}</h3>
                             <p className="line-clamp-1 max-w-full truncate text-sm whitespace-pre-wrap text-gray-500">
@@ -87,7 +83,7 @@ const Search = () => {
     }
 
     return (
-        <div className="relative flex w-full max-w-[500px] items-center justify-center px-4 sm:px-8">
+        <div className="relative flex w-full max-w-125 items-center justify-center px-4 sm:px-8">
             <TippyHeadless
                 interactive
                 visible={showResult && searchResult.length > 0}

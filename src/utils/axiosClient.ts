@@ -89,6 +89,11 @@ export const post = async (path: string, data = {}, options = {}) => {
     return response
 }
 
+export const put = async (path: string, data = {}, options = {}) => {
+    const response = await request.put(path, data, options)
+    return response
+}
+
 export const patch = async (path: string, data = {}, options = {}) => {
     const response = await request.patch(path, data, options)
     return response

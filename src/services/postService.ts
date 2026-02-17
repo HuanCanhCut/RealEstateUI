@@ -132,3 +132,9 @@ export const getUserPostApproval = async ({
 
     return response.data
 }
+
+export const updatePost = async ({ postId, data }: { postId: number; data: CreatePostParams }) => {
+    const response = await request.put(`/posts/${postId}`, data)
+
+    return response.data
+}

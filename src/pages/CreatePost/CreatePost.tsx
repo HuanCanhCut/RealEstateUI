@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useEffectEvent, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useSearchParams } from 'react-router'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
@@ -17,6 +18,7 @@ import { selectCurrentUser } from '~/redux/selector'
 import { useAppSelector } from '~/redux/types'
 import * as categoryServices from '~/services/categoryService'
 import * as postService from '~/services/postService'
+import type { PostModel } from '~/types/post'
 import handleApiError from '~/utils/handleApiError'
 import uploadToCloudinary from '~/utils/uploadToCloudinary'
 
@@ -101,6 +103,11 @@ type FieldValue = z.infer<typeof createPostSchema>
 const CreatePost = () => {
     const currentUser = useAppSelector(selectCurrentUser)
 
+    const [searchParams] = useSearchParams()
+
+    const isEdit = searchParams.get('mode') === 'edit'
+    const postId = searchParams.get('postId')
+
     const {
         register,
         handleSubmit,
@@ -111,14 +118,49 @@ const CreatePost = () => {
         mode: 'onChange',
     })
 
+    const [type, setType] = useState<'sell' | 'rent'>('sell')
+    const [role, setRole] = useState<'personal' | 'agent'>('personal')
+    const [files, setFiles] = useState<File[]>([])
+    const [imagePreview, setImagePreview] = useState<string[]>([])
+
+    const { data: post } = useQuery({
+        queryKey: ['post', postId],
+        queryFn: () => postService.getPostById({ postId: Number(postId) }),
+        enabled: isEdit && !!postId,
+    })
+
+    const onPostLoaded = useEffectEvent((post: PostModel) => {
+        setType(post.type)
+        setRole(post.role)
+
+        setValue('category_id', post.category_id.toString())
+        setValue('sub_locality', post.sub_locality)
+        setValue('administrative_address', post.administrative_address)
+        setValue('bedrooms', post.detail.bedrooms?.toString() || '')
+        setValue('bathrooms', post.detail.bathrooms?.toString() || '')
+        setValue('balcony', post.detail.balcony)
+        setValue('main_door', post.detail.main_door)
+        setValue('legal_documents', post.detail.legal_documents)
+        setValue('interior_status', post.detail.interior_status)
+        setValue('area', post.detail.area.toString())
+        setValue('price', post.detail.price.toString())
+        setValue('deposit', post.detail.deposit.toString())
+        setValue('title', post.title)
+        setValue('description', post.description)
+
+        setImagePreview(post.images)
+    })
+
+    useEffect(() => {
+        if (isEdit && post?.data) {
+            onPostLoaded(post.data)
+        }
+    }, [isEdit, post?.data, setValue])
+
     const { data: categories } = useQuery({
         queryKey: ['categories'],
         queryFn: () => categoryServices.getCategories(1, 100),
     })
-
-    const [type, setType] = useState<'sell' | 'rent'>('sell')
-    const [role, setRole] = useState<'personal' | 'agent'>('personal')
-    const [files, setFiles] = useState<(File & { preview?: string })[]>([])
 
     const handleSelectType = (type: 'sell' | 'rent') => {
         setType(type)
@@ -139,7 +181,7 @@ const CreatePost = () => {
     }
 
     const handleCreatePost = async (data: FieldValue) => {
-        if (files.length === 0) {
+        if (files.length === 0 && !imagePreview.length) {
             toast.error('Vui lòng tải lên ít nhất 1 hình ảnh')
             return
         }
@@ -161,16 +203,17 @@ const CreatePost = () => {
             // upload image to cloudinary
             const promises = await Promise.all(
                 files.map((file) => {
-                    // remove preview
-                    delete file.preview
-
                     return uploadToCloudinary({ file, folder: 'real_estate/post', type: 'image' })
                 }),
             )
 
-            const images: string[] = promises.map((promise) => promise.secure_url)
+            const images: string[] = [
+                // remove blob url
+                ...imagePreview.filter((preview) => !preview.startsWith('blob:')),
+                ...promises.map((promise) => promise.secure_url),
+            ]
 
-            await postService.createPost({
+            const postData = {
                 sub_locality: data.sub_locality,
                 administrative_address: data.administrative_address,
                 type,
@@ -190,11 +233,21 @@ const CreatePost = () => {
                 description: data.description,
                 images,
                 category_id: Number(data.category_id),
-            })
+            }
 
-            toast.success('Bài đăng của bạn đã được tạo thành công', {
-                id: toastId,
-            })
+            if (isEdit) {
+                await postService.updatePost({ postId: Number(postId), data: postData })
+
+                toast.success('Bài đăng của bạn đã được cập nhật thành công', {
+                    id: toastId,
+                })
+            } else {
+                await postService.createPost(postData)
+
+                toast.success('Bài đăng của bạn đã được tạo thành công', {
+                    id: toastId,
+                })
+            }
         } catch (error) {
             handleApiError({ error })
         }
@@ -202,7 +255,12 @@ const CreatePost = () => {
 
     return (
         <div className="container mx-auto mt-8 grid max-w-7xl grid-cols-12 gap-4 rounded-md bg-white p-2 pb-8 shadow-md">
-            <ImageUpload setFiles={setFiles} files={files} />
+            <ImageUpload
+                setFiles={setFiles}
+                files={files}
+                imagePreview={imagePreview}
+                setImagePreview={setImagePreview}
+            />
             <div className="col-span-12 p-2 md:col-span-8 lg:col-span-9">
                 <form className="flex flex-col gap-4" onSubmit={handleSubmit(handleCreatePost)}>
                     <div>
@@ -378,7 +436,7 @@ const CreatePost = () => {
                     </div>
 
                     <Button type="submit" className="mt-6 w-full" disabled={isSubmitting}>
-                        {isSubmitting ? <Spinner /> : 'Đăng tin'}
+                        {isSubmitting ? <Spinner /> : isEdit ? 'Cập nhật' : 'Đăng tin'}
                     </Button>
                 </form>
             </div>
