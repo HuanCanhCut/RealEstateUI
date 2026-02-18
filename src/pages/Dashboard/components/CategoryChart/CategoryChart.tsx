@@ -1,10 +1,27 @@
-import { Pie } from 'react-chartjs-2'
-import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js'
+import { Pie, PieChart, type PieSectorShapeProps, Sector } from 'recharts'
+import { Tooltip } from 'recharts'
 
 import { useQuery } from '@tanstack/react-query'
 import * as categoryServices from '~/services/categoryService'
 
-ChartJS.register(ArcElement, Tooltip, Legend)
+const stringToColor = (str: string) => {
+    let hash = 0
+    str.split('').forEach((char) => {
+        hash = char.charCodeAt(0) + ((hash << 5) - hash)
+    })
+
+    let color = '#'
+
+    for (let i = 0; i < 3; i++) {
+        const value = (hash >> (i * 8)) & 0xff
+        color += value.toString(16).padStart(2, '0')
+    }
+    return color
+}
+const MyCustomPie = (props: PieSectorShapeProps & { payload?: { name?: string } }) => {
+    const color = props.payload?.name ? stringToColor(props.payload.name) : '#ccc'
+    return <Sector {...props} fill={color} />
+}
 
 const CategoryChart = () => {
     const { data: categories } = useQuery({
@@ -12,40 +29,35 @@ const CategoryChart = () => {
         queryFn: () => categoryServices.getCategories(1, 10),
     })
 
-    function stringToColor(str: string) {
-        let hash = 0
-        for (let i = 0; i < str.length; i++) {
-            hash = str.charCodeAt(i) + ((hash << 5) - hash)
-        }
-        const hue = Math.abs(hash % 360)
-        return `hsl(${hue}, 70%, 60%)`
-    }
-
-    const data = {
-        labels: categories?.data.map((category) => category.name) || [],
-        datasets: [
-            {
-                label: 'Số bài đăng',
-                data: categories?.data.map((category) => category.post_count) || [],
-                backgroundColor: categories?.data.map((category) => stringToColor(category.name)) || [],
-                borderWidth: 1,
-            },
-        ],
-    }
-
     return (
         <div>
-            <Pie
-                data={data}
-                options={{
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                        },
-                    },
-                    responsive: true,
-                }}
-            />
+            {categories?.data && (
+                <PieChart
+                    style={{
+                        width: '100%',
+                        aspectRatio: 1,
+                    }}
+                    responsive
+                >
+                    <Pie
+                        data={categories?.data}
+                        labelLine={false}
+                        dataKey={'post_count'}
+                        nameKey={'name'}
+                        isAnimationActive={true}
+                        shape={MyCustomPie}
+                    />
+                    <Tooltip
+                        contentStyle={{
+                            padding: '4px 8px',
+                            borderRadius: '8px',
+                        }}
+                        itemStyle={{
+                            fontSize: '12px',
+                        }}
+                    />
+                </PieChart>
+            )}
         </div>
     )
 }
