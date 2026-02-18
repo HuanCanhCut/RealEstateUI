@@ -29,7 +29,7 @@ const AdminLayout = () => {
                         <Interaction />
                     </div>
                 </header>
-                <main className="flex-1 bg-[rgb(249_250_251)] md:ml-72.5">
+                <main className="flex-1 bg-[rgb(249_250_251)] p-6 md:ml-72.5">
                     <Outlet />
                 </main>
             </div>

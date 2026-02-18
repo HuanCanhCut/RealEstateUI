@@ -105,7 +105,7 @@ const SidebarFilter: React.FC<SidebarFilterProps> = ({ className }) => {
 
             {provinces && (
                 <FilterItem
-                    title="Lọc theo khoảng giá"
+                    title="Lọc theo tỉnh/thành phố"
                     items={provinces}
                     type="location"
                     onChoose={handleChooseFilterOption}
