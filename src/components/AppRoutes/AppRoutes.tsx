@@ -2,9 +2,11 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 
 import AuthRoute from './AuthRoute'
 import ProtectedRoute from './ProtectedRoute'
+import AdminLayout from '~/layout/AdminLayout'
 import AuthLayout from '~/layout/AuthLayout'
 import DefaultLayout from '~/layout/DefaultLayout'
 import CreatePostPage from '~/pages/CreatePost'
+import DashboardPage from '~/pages/Dashboard'
 import ForgotPasswordPage from '~/pages/ForgotPassword'
 import HomePage from '~/pages/Home/Home'
 import LoginPage from '~/pages/Login'
@@ -18,6 +20,18 @@ const AppRoutes = () => {
     return (
         <BrowserRouter>
             <Routes>
+                {/* AUTH ROUTES */}
+                <Route path="/auth" element={<AuthRoute />}>
+                    <Route element={<AuthLayout />}>
+                        <Route path="login" element={<LoginPage />} />
+                        <Route path="register" element={<RegisterPage />} />
+                        <Route path="forgot-password" element={<ForgotPasswordPage />} />
+                    </Route>
+
+                    <Route path="verify" element={<VerifyPage />} />
+                </Route>
+
+                {/* USER ROUTES */}
                 <Route element={<DefaultLayout />}>
                     <Route index element={<HomePage />} />
                     <Route path="/post/:id" element={<PostDetailPage />} />
@@ -32,14 +46,9 @@ const AppRoutes = () => {
                     <Route path="/user/:nickname" element={<Profile />} />
                 </Route>
 
-                <Route path="/auth" element={<AuthRoute />}>
-                    <Route element={<AuthLayout />}>
-                        <Route path="login" element={<LoginPage />} />
-                        <Route path="register" element={<RegisterPage />} />
-                        <Route path="forgot-password" element={<ForgotPasswordPage />} />
-                    </Route>
-
-                    <Route path="verify" element={<VerifyPage />} />
+                {/* ADMIN ROUTES */}
+                <Route path="/admin" element={<AdminLayout />}>
+                    <Route path="dashboard" element={<DashboardPage />} />
                 </Route>
 
                 <Route path="*" element={<NotFoundPage />} />

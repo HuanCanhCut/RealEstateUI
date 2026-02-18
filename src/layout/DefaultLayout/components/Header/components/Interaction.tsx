@@ -76,13 +76,6 @@ const Interaction = () => {
         <>
             {currentUser ? (
                 <div className="flex items-center gap-2">
-                    <Button variant={'default'} className="hidden md:flex">
-                        Quản lý tin đăng
-                    </Button>
-                    <Button variant={'secondary'} className="hidden md:flex" to={config.routes.createPost}>
-                        Đăng tin
-                    </Button>
-
                     <CustomTippy
                         renderItem={() => (
                             <PopperWrapper className="max-w-70 min-w-70 p-0 text-sm">

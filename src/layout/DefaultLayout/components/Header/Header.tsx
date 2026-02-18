@@ -5,9 +5,14 @@ import Interaction from './components/Interaction'
 import Search from './components/Search'
 import Button from '~/components/Button'
 import LocationSelect from '~/components/LocationSelect'
+import config from '~/config'
 import { sendEvent } from '~/helpers/events'
+import { selectCurrentUser } from '~/redux/selector'
+import { useAppSelector } from '~/redux/types'
 
 const Header = () => {
+    const currentUser = useAppSelector(selectCurrentUser)
+
     const handleToggleSidebar = () => {
         sendEvent('TOGGLE_MOBILE_SIDEBAR')
     }
@@ -31,7 +36,22 @@ const Header = () => {
             </div>
             <Search />
 
-            <Interaction />
+            <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                    <Button
+                        variant={'default'}
+                        className="hidden md:flex"
+                        to={config.routes.profile.replace(':@nickname', `@${currentUser?.nickname || ''}?tab=pending`)}
+                    >
+                        Quản lý tin đăng
+                    </Button>
+                    <Button variant={'secondary'} className="hidden md:flex" to={config.routes.createPost}>
+                        Đăng tin
+                    </Button>
+                </div>
+
+                <Interaction />
+            </div>
         </div>
     )
 }

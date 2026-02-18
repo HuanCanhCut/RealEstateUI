@@ -171,7 +171,10 @@ const Profile = () => {
                                                 hidden: tab.isShow === false,
                                             },
                                         )}
-                                        onClick={() => setActiveTab(tab.value)}
+                                        onClick={() => {
+                                            setActiveTab(tab.value)
+                                            window.history.pushState(null, '', `?tab=${tab.value}`)
+                                        }}
                                     >
                                         {tab.icon}
                                         {tab.label}

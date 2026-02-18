@@ -43,6 +43,18 @@ const ALL_ROUTES = [
         path: '/admin/dashboard',
         key: 'dashboard',
     },
+    {
+        path: '/admin/posts',
+        key: 'posts',
+    },
+    {
+        path: '/admin/contracts',
+        key: 'contracts',
+    },
+    {
+        path: '/admin/reports',
+        key: 'reports',
+    },
 ] as const
 
 type RouteKey = (typeof ALL_ROUTES)[number]['key']
