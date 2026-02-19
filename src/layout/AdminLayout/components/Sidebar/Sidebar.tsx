@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { NavLink } from 'react-router'
+import { Link, NavLink } from 'react-router'
 import { BarChart, FileText, LayoutDashboard, SquareChartGantt } from 'lucide-react'
 
 import config from '~/config'
@@ -34,7 +34,16 @@ const Sidebar = () => {
                     isOpen && 'translate-x-0',
                 )}
             >
-                <h2 className="p-2 text-center text-xl font-bold">ADMIN DASHBOARD</h2>
+                <h2 className="flex items-center justify-center gap-2 p-2 text-center text-xl font-bold">
+                    <Link to="/">
+                        <img
+                            src="/static/media/logo.png"
+                            alt="logo"
+                            className="hidden h-auto w-10 min-w-10 shrink-0 cursor-pointer object-cover sm:block"
+                        />
+                    </Link>
+                    ADMIN DASHBOARD
+                </h2>
 
                 <p className="mt-10 text-sm text-gray-500">MENU</p>
 

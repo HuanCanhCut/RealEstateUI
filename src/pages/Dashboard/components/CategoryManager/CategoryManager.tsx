@@ -97,7 +97,7 @@ const CategoryManager = () => {
                     handleCloseModal()
                 }}
             >
-                <PopperWrapper className="relative max-w-[425px] p-6" onKeyDown={handleKeyDown}>
+                <PopperWrapper className="relative max-w-[425px] overflow-y-auto p-6" onKeyDown={handleKeyDown}>
                     <h2 className="text-lg leading-none font-semibold">Quản lý danh mục</h2>
                     <p className="text-muted-foreground mt-2 text-sm">
                         Quản lý danh mục của bạn. Nhấn lưu khi hoàn tất.

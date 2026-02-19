@@ -18,6 +18,7 @@ const stringToColor = (str: string) => {
     }
     return color
 }
+
 const MyCustomPie = (props: PieSectorShapeProps & { payload?: { name?: string } }) => {
     const color = props.payload?.name ? stringToColor(props.payload.name) : '#ccc'
     return <Sector {...props} fill={color} />
@@ -58,6 +59,17 @@ const CategoryChart = () => {
                     />
                 </PieChart>
             )}
+
+            <div className="flex flex-wrap justify-center gap-4">
+                {categories?.data.map((category) => {
+                    return (
+                        <div className="flex items-center gap-2" key={category.id}>
+                            <div className="px-4 py-1" style={{ backgroundColor: stringToColor(category.name) }}></div>
+                            <p>{category.name}</p>
+                        </div>
+                    )
+                })}
+            </div>
         </div>
     )
 }
