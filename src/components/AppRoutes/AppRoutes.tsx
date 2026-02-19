@@ -12,6 +12,7 @@ import HomePage from '~/pages/Home/Home'
 import LoginPage from '~/pages/Login'
 import NotFoundPage from '~/pages/NotFound'
 import PostDetailPage from '~/pages/PostDetail'
+import PostManagerPage from '~/pages/PostManager/PostManager'
 import Profile from '~/pages/Profile'
 import RegisterPage from '~/pages/Register'
 import VerifyPage from '~/pages/VerifyAccount'
@@ -49,6 +50,7 @@ const AppRoutes = () => {
                 {/* ADMIN ROUTES */}
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="dashboard" element={<DashboardPage />} />
+                    <Route path="posts" element={<PostManagerPage />} />
                 </Route>
 
                 <Route path="*" element={<NotFoundPage />} />
