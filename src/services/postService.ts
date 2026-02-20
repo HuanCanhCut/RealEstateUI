@@ -17,6 +17,7 @@ export const getPosts = async ({
     per_page,
     role,
     category_id,
+    type,
     location,
     approval_status,
     min_price,
@@ -26,6 +27,7 @@ export const getPosts = async ({
     per_page: number
     role?: 'personal' | 'agent'
     category_id?: number | null
+    type?: 'sell' | 'rent'
     location?: string
     approval_status?: 'approved' | 'pending' | 'rejected' | 'all'
     min_price?: number | null
@@ -37,6 +39,7 @@ export const getPosts = async ({
             per_page,
             role,
             category_id,
+            type,
             location,
             approval_status,
             min_price,
@@ -135,6 +138,24 @@ export const getUserPostApproval = async ({
 
 export const updatePost = async ({ postId, data }: { postId: number; data: CreatePostParams }) => {
     const response = await request.put(`/posts/${postId}`, data)
+
+    return response.data
+}
+
+export const approvePost = async ({ postId }: { postId: number }) => {
+    const response = await request.patch(`/posts/${postId}/approve`)
+
+    return response.data
+}
+
+export const pendingPost = async ({ postId }: { postId: number }) => {
+    const response = await request.patch(`/posts/${postId}/pending`)
+
+    return response.data
+}
+
+export const rejectPost = async ({ postId }: { postId: number }) => {
+    const response = await request.patch(`/posts/${postId}/reject`)
 
     return response.data
 }
