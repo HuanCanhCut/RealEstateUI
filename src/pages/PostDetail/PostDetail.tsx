@@ -205,12 +205,6 @@ const PostDetailPage = () => {
                                     </div>
 
                                     <div className="mt-4 flex gap-3">
-                                        <Button
-                                            className="border-primary/50 text-primary hover:text-primary flex-1 border"
-                                            variant={'outline'}
-                                        >
-                                            Ký hợp đồng online
-                                        </Button>
                                         <Button className="border-primary/50 flex-1 border" variant={'default'}>
                                             {post?.data.user.phone_number || 'Không có số điện thoại'}
                                         </Button>

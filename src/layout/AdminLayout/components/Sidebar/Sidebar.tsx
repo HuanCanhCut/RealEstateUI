@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router'
-import { BarChart, FileText, LayoutDashboard, SquareChartGantt } from 'lucide-react'
+import { BarChart, LayoutDashboard, SquareChartGantt } from 'lucide-react'
 
 import config from '~/config'
 import { listenEvent } from '~/helpers/events'
@@ -74,20 +74,6 @@ const Sidebar = () => {
                         >
                             <SquareChartGantt size={18} />
                             Tin đăng
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink
-                            to={config.routes.contracts}
-                            className={({ isActive }) => {
-                                return cn(
-                                    'hover:bg-primary/4 mt-2 flex items-center gap-2 rounded-md px-2 py-3 text-sm font-medium select-none',
-                                    isActive && 'text-primary bg-primary/6',
-                                )
-                            }}
-                        >
-                            <FileText size={18} />
-                            Hợp đồng
                         </NavLink>
                     </li>
                     <li>

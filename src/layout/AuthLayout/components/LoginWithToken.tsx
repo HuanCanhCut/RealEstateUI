@@ -1,7 +1,7 @@
 // import { useRouter } from 'next/navigation'
 import { useNavigate } from 'react-router'
 import { useSearchParams } from 'react-router'
-import { signInWithPopup } from 'firebase/auth'
+import { signInWithPopup, type UserCredential } from 'firebase/auth'
 import { toast } from 'sonner'
 
 import config from '~/config'
@@ -14,15 +14,16 @@ const LoginWithToken = () => {
 
     const handleLoginWithGoogle = async () => {
         try {
-            const { user }: any = await signInWithPopup(config.firebaseAuth, config.googleProvider)
+            const user: UserCredential = await signInWithPopup(config.firebaseAuth, config.googleProvider)
 
             if (user) {
-                const response = await authServices.loginWithGoogle(user.accessToken)
+                // @ts-expect-error - user.user.accessToken is not defined in the type
+                const response = await authServices.loginWithGoogle(user.user.accessToken)
 
                 if (response) {
                     if (!response.data.is_active) {
                         navigate(
-                            `${config.routes.verify}?auth_challenge_id=${encodeURIComponent(response.meta?.auth_challenge_id || '')}&redirect_to=${window.location.origin}${config.routes.home}&from_email=${encodeURIComponent(user.email)}`,
+                            `${config.routes.verify}?auth_challenge_id=${encodeURIComponent(response.meta?.auth_challenge_id || '')}&redirect_to=${window.location.origin}${config.routes.home}&from_email=${encodeURIComponent(user.user.email || '')}`,
                         )
                     } else {
                         if (searchParams.get('redirect_to')) {

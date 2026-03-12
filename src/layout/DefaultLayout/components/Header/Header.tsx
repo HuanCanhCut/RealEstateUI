@@ -37,18 +37,23 @@ const Header = () => {
             <Search />
 
             <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                    <Button
-                        variant={'default'}
-                        className="hidden md:flex"
-                        to={config.routes.profile.replace(':@nickname', `@${currentUser?.nickname || ''}?tab=pending`)}
-                    >
-                        Quản lý tin đăng
-                    </Button>
-                    <Button variant={'secondary'} className="hidden md:flex" to={config.routes.createPost}>
-                        Đăng tin
-                    </Button>
-                </div>
+                {currentUser && (
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant={'default'}
+                            className="hidden md:flex"
+                            to={config.routes.profile.replace(
+                                ':@nickname',
+                                `@${currentUser?.nickname || ''}?tab=pending`,
+                            )}
+                        >
+                            Quản lý tin đăng
+                        </Button>
+                        <Button variant={'secondary'} className="hidden md:flex" to={config.routes.createPost}>
+                            Đăng tin
+                        </Button>
+                    </div>
+                )}
 
                 <Interaction />
             </div>

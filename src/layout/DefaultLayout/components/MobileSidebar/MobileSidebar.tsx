@@ -172,16 +172,18 @@ const MobileSidebar = () => {
                     ))}
                 </div>
 
-                <div className="absolute right-0 bottom-0 left-0 w-full px-3 py-3">
-                    <Button
-                        variant="secondary"
-                        className="text-destructive flex w-full justify-start"
-                        onClick={handleLogout}
-                    >
-                        <LogOut size={16} />
-                        Đăng xuất
-                    </Button>
-                </div>
+                {currentUser && (
+                    <div className="absolute right-0 bottom-0 left-0 w-full px-3 py-3">
+                        <Button
+                            variant="secondary"
+                            className="text-destructive flex w-full justify-start"
+                            onClick={handleLogout}
+                        >
+                            <LogOut size={16} />
+                            Đăng xuất
+                        </Button>
+                    </div>
+                )}
             </div>
             <div
                 className={cn(

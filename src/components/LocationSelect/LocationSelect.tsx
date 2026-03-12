@@ -219,6 +219,8 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ className, onSubmit = (
                                 </Button>
 
                                 {data.sort().map((name) => {
+                                    const isChecked = location[selectData.type as keyof typeof location] === name
+
                                     return (
                                         <Button
                                             key={name}
@@ -242,7 +244,14 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ className, onSubmit = (
                                         >
                                             {name}
 
-                                            <div className="border-primary/50 absolute top-1/2 right-2 h-5 w-5 -translate-y-1/2 rounded-full border"></div>
+                                            <div
+                                                className={cn(
+                                                    'border-primary/50 text-primary absolute top-1/2 right-2 h-5 w-5 -translate-y-1/2 rounded-full border',
+                                                    isChecked && 'bg-primary/20',
+                                                )}
+                                            >
+                                                {isChecked && '✓'}
+                                            </div>
                                         </Button>
                                     )
                                 })}
@@ -282,6 +291,13 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ className, onSubmit = (
         )
     }
 
+    const handleClickOutside = () => {
+        setSelectData((prev) => ({
+            ...prev,
+            type: '',
+        }))
+    }
+
     return (
         <CustomTippy
             renderItem={render}
@@ -290,6 +306,7 @@ const LocationSelect: React.FC<LocationSelectProps> = ({ className, onSubmit = (
             onShow={(instance) => {
                 tippyInstance.current = instance
             }}
+            onClickOutside={handleClickOutside}
         >
             <div
                 className={cn(
