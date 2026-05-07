@@ -204,7 +204,7 @@ const Profile = () => {
                                             <PostItem
                                                 post={post}
                                                 key={post.id}
-                                                className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-3"
+                                                className="col-span-12 sm:col-span-6 md:col-span-6 lg:col-span-4 xl:col-span-4"
                                                 queryKey={queryKey}
                                                 showLike={activeTab !== 'pending' && activeTab !== 'rejected'}
                                             />

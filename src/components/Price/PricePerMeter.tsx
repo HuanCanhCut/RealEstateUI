@@ -8,10 +8,12 @@ interface PricePerMeterProps {
 }
 
 const PricePerMeter: React.FC<PricePerMeterProps> = ({ price, area, className }) => {
+    const pricePerMeter = Number(calculatePricePerM2(price, area).replace('triệu', '')).toFixed(2)
+
     return (
         <div className={cn('mt-1 flex items-center gap-2 text-sm text-zinc-500', className)}>
             <span className="text-lg font-bold text-red-500">{formatVNPrice(price)}</span>
-            <span className="text-sm">{calculatePricePerM2(price, area).replace('triệu', 'tr')}/m²</span>
+            <span className="text-sm">{pricePerMeter}tr/m²</span>
             <span className="text-sm">{area} m²</span>
         </div>
     )
